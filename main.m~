@@ -135,9 +135,6 @@ purity = int8(purity * 100 / nb_neighbors);
 best_clusters_idx = sorted_idx(1:100);
 
 
-% generate a html page to see the results at this stage
-% (too many params...)
+% generate a html page to see the results
+% too much 
 generate_html_view(initPatches, closest_patches, best_clusters_idx, top_nn_idx, ds.imgs);
-
-
-% STEP 3 : to continue...
