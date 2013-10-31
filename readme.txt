@@ -13,4 +13,4 @@ check config.m
 
 %% RUNNING
 
-main_parallel.m
+main.m
