@@ -29,11 +29,11 @@ for i = 1 : length(selected)
     metadata(i).size.ncols=sz(2);
     metadata(i).size.nrows=sz(1);
     metadata(i).imidx=imidx;
-    if(size(im)>1)
-      metadata(i).setidx=im(2);
-    else
-      metadata(i).setidx=0; %ds.conf.currimset;
-    end
+   % if(size(im)>1)
+   %   metadata(i).setidx=im(2);
+   % else
+   %   metadata(i).setidx=0; %ds.conf.currimset;
+   % end
   else
     metadata(i).size.ncols =size(im,2);
     metadata(i).size.nrows =size(im,1);

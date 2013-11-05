@@ -2,15 +2,15 @@
 %preparing data
 %prepare_data();
 
-%load imgs data
-load('data/carldata.mat');
+% load imgs data
+load('data/paris_data.mat');
 ds.imgs = imgs;
 
 % split data into pos + neg dataset
-positive_label = 2; % time period 2 (oldish buildings)
-negative_label = 1; % time period 7 (newish buildings)
-pos_idx = find([ds.imgs.label] == positive_label);
-neg_idx = find([ds.imgs.label] == negative_label);
+positive_period = 1; % time period 2 (oldish buildings)
+negative_period = 7; % time period 7 (newish buildings)
+pos_idx = find([ds.imgs.label] == positive_period);
+neg_idx = find([ds.imgs.label] ~= positive_periodnegative_period);
 
 % we actually take a subset/sample
 if (numel(pos_idx)> ds.params.neg_sample_size)

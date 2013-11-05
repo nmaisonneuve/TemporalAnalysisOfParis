@@ -7,13 +7,9 @@ config();
 % preparing the dataset for the experiment
 load_data();
 
-% FAKE TO TEST 
-ds.all_imgs_idx = [neg_idx(1:6) pos_idx(1:3)];
-ds.params.seed_candidate_size = 20;
-
 %%%% STEP 1 - computing seed candidate patches
 
-step1_todo = false;
+step1_todo = true;
 
 if (step1_todo)
   
@@ -23,7 +19,7 @@ if (step1_todo)
   fprintf('\nComputing candidate patches from %d positive images', numel(seed_pos_idx));
     
   % number of initial clusters
-  nb_init_clusters = numel(seed_pos_idx) * ds.params.patches_per_image;
+  nb_init_clusters = numel(seed_pos_idx) * ds.params.seed_patches_per_image;
 
   % take {ds.seed_candidate_size} random patches from each selected image
   initPatches = [];
@@ -31,7 +27,7 @@ if (step1_todo)
   parfor i = 1: numel(seed_pos_idx)  
     idx = seed_pos_idx(i);
     fprintf('\nComputing patches from image %d (idx: %d)', i, idx);
-    [new_patches, new_feats, ~] = sampleRandomPatches(idx, ds, ds.params.patches_per_image);
+    [new_patches, new_feats, ~] = sampleRandomPatches(idx, ds, ds.params.seed_patches_per_image);
     
     %append
     initPatches = [initPatches new_patches];
@@ -52,7 +48,6 @@ else
 end
 
 
-
 %%% STEP 2 - computing nearest neighbors
 
 nb_all_imgs = numel(ds.all_imgs_idx);
@@ -71,15 +66,17 @@ image_column_id =2;
 parfor i = 1: nb_all_imgs
   img_id = ds.all_imgs_idx(i);
   
+  fprintf('\nComputing KNN for image %d (%d)', img_id, i);
+  
   % generate img id column
   img_id_column = ones(nb_init_clusters,1) * img_id;
   
   % get the nearest patch in the image for each patch candidate  (+ its distance)
   % => in the NN process, 2 NN patches could not be from the same image =>
   % good
-   % get image path
+  % get image path
   img_path = ds.imgs(img_id).path;
-  [~, dist, patches_coordinates] = nn_cluster(img_path, ds.centers, ds.params);
+  [~, dist, patches_coordinates] = nn_cluster(img_path, centers, ds.params);
   
   %img_patches(1+(i-1) * nb_init_clusters  : i * nb_init_clusters, :) = [img_id_column patches_coordinates];
   %img_patches = [img_patches; [img_id_column patches_coordinates]];
@@ -92,7 +89,6 @@ end
 
 % add a 'cluster_id' column
 closest_patches = [repmat((1:nb_init_clusters), 1, nb_all_imgs)' closest_patches];
-
 
 %(debug) add label 
 %closest_patches = [closest_patches ismember(closest_patches(:,2), pos_idx)];
@@ -135,9 +131,37 @@ purity = int8(purity * 100 / nb_neighbors);
 best_clusters_idx = sorted_idx(1:100);
 
 
+%%
+% formatting output data 
+%generate the clusters struct
+clusters = struct();
+for (i = 1 : numel(best_clusters_idx))
+  
+  % the centroids
+  centroid = initPatches(best_clusters_idx(i)); 
+  clusters(i).centroid =  struct('imidx',centroid.imidx, 'patch',[centroid.x1 centroid.x2 centroid.y1 centroid.y2]);
+  
+  % the related Nearest neighboors patches [img_id, patch_id]
+  nn_patches = closest_patches(top_nn_idx(best_clusters_idx(i),:),[2 4:7]);
+  nn = struct();
+   for (j = 1: size(nn_patches,1))
+     nn(j).imidx = nn_patches(j,1);
+     %nn(j).patch = nn_patches(j,2:end);
+     nn(j).x1 = nn_patches(j,2);
+     nn(j).x2 = nn_patches(j,3);
+     nn(j).y1 = nn_patches(j,4);
+     nn(j).y2 = nn_patches(j,5);
+     nn(j).label = ismember(nn_patches(j,1),pos_idx);
+   end
+  clusters(i).nn = nn;
+  
+  % purity 
+  clusters(i).purity = purity(best_clusters_idx(i));
+end
+
 % generate a html page to see the results at this stage
 % (too many params...)
-generate_html_view(initPatches, closest_patches, best_clusters_idx, top_nn_idx, ds.imgs);
+generate_html_view(initPatches, closest_patches, best_clusters_idx, top_nn_idx, ds.imgs, pos_idx, purity);
 
 
 % STEP 3 : to continue...

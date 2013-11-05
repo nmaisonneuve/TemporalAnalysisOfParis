@@ -9,10 +9,8 @@ fclose(fid);
 % collecting image size (may varying)
 % (+ checking implicitly the availability of images)
 disp('collecting the size of images...');
-
-invalid = [];
 for i = 1: numel(imgs)
-   if mod(i,500) == 0 
+   if mod(i,100) == 0 
      fprintf('\ncollecting image size of %dth image',i); 
    end
    try 
@@ -20,11 +18,8 @@ for i = 1: numel(imgs)
     I = imread(imgs(i).path);
     imgs(i).imsize = size(I);
    catch
-    invalid = [invalid i];
-    fprintf('\n\n\nERROR for image %s', imgs(i).path);
-   end
-   
+    fprintf('ERROR for image %s', imgs(i).path);
+   end   
 end
-imgs(invalid) = [];
-disp(size(imgs));
-save('data/paris_data.mat','imgs');
+
+save('paris_data','imgs');
