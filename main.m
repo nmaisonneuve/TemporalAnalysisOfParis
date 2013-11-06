@@ -138,14 +138,17 @@ clusters = struct();
 for (i = 1 : numel(best_clusters_idx))
   
   % the centroids
-  centroid = initPatches(best_clusters_idx(i)); 
-  clusters(i).centroid =  struct('imidx',centroid.imidx, 'patch',[centroid.x1 centroid.x2 centroid.y1 centroid.y2]);
-  
+  centroid =  initPatches(best_clusters_idx(i)); 
+  centroid.patch_id = -1;
+  centroid.cluster_id = i;
+  clusters(i).centroid = centroid;
   % the related Nearest neighboors patches [img_id, patch_id]
   nn_patches = closest_patches(top_nn_idx(best_clusters_idx(i),:),[2 4:7]);
   nn = struct();
    for (j = 1: size(nn_patches,1))
-     nn(j).imidx = nn_patches(j,1);
+     nn(j).cluster_id = i;
+     nn(j).img_id = nn_patches(j,1);
+     nn(j).patch_id = j;
      %nn(j).patch = nn_patches(j,2:end);
      nn(j).x1 = nn_patches(j,2);
      nn(j).x2 = nn_patches(j,3);
@@ -159,9 +162,10 @@ for (i = 1 : numel(best_clusters_idx))
   clusters(i).purity = purity(best_clusters_idx(i));
 end
 
+
 % generate a html page to see the results at this stage
 % (too many params...)
-generate_html_view(initPatches, closest_patches, best_clusters_idx, top_nn_idx, ds.imgs, pos_idx, purity);
+generate_html_view(clusters, ds.imgs);
 
 
 % STEP 3 : to continue...

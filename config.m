@@ -8,6 +8,7 @@ format shortG;
 addpath(fullfile('./libs/crossValClustering/'));
 addpath(fullfile('./libs/MinMaxSelection/'));
 addpath(fullfile('./libs/hog/'));
+addpath(fullfile('./libs/jsonlab/'));
 addpath(fullfile('./libs/pf-segmentation/'));
 addpath(fullfile('./libs/'));
 % (optional) add unit tests directory to run some tests/debug
