@@ -38,21 +38,4 @@ fprintf('\n Generating patches + computing features for image %s\n', img_path);
   patch(invalid,:) =  [];
   %patch_idx(invalid,:) = [];
     
-  fprintf('\nthrew out %d patches / %d', sum(invalid), raw_size);
- 
-
-[prSize, pcSize, ~] = getCanonicalPatchHOGSize(params);
-canoSc = pyramid.canonicalScale;
-level = patch(:,1);
-x1 = patch(:,2);
-y1 = patch(:,3);
-level_scale = pyramid.scales(level)';
-tmp = pyramid.sbins * level_scale / canoSc;  
-xoffset = floor((x1 - 1) .* tmp) + 1;
-yoffset = floor((y1 - 1) .* tmp) + 1;
-l_p_1 = round((pcSize + 2) * pyramid.sbins * level_scale / canoSc) - 1;
-l_p_2 = round((prSize + 2) * pyramid.sbins * level_scale / canoSc) - 1;
-pos = [xoffset (xoffset + l_p_1) yoffset (yoffset+ l_p_2)];
-
-
-  
+  fprintf('\nthrew out %d patches / %d', sum(invalid), raw_size);  

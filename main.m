@@ -1,50 +1,51 @@
-% clear workspace
-clear;
-
-% load configuration
-config();
-
-% preparing the dataset for the experiment
-load_data();
-
 %%%% STEP 1 - computing seed candidate patches
 
-step1_todo = true;
-
+data_step1_filename = sprintf('data/step1_%s.mat',ds.params.experiment_name);
+ 
 if (step1_todo)
   
   % takes a ramdom sample of positive images
   % to get seed patch candidates
-  seed_pos_idx = randsample(numel(pos_idx),ds.params.seed_candidate_size);
+  seed_pos_idx = randsample(pos_idx, ds.params.seed_candidate_size);
   fprintf('\nComputing candidate patches from %d positive images', numel(seed_pos_idx));
     
   % number of initial clusters
   nb_init_clusters = numel(seed_pos_idx) * ds.params.seed_patches_per_image;
 
   % take {ds.seed_candidate_size} random patches from each selected image
-  initPatches = [];
-  initFeats = [];
+
+ tic;
+ % we use struct  due to parallel computing
+image_patches = struct(); 
   parfor i = 1: numel(seed_pos_idx)  
-    idx = seed_pos_idx(i);
-    fprintf('\nComputing patches from image %d (idx: %d)', i, idx);
-    [new_patches, new_feats, ~] = sampleRandomPatches(idx, ds, ds.params.seed_patches_per_image);
-    
+    img_idx = seed_pos_idx(i);
+    fprintf('\n\nComputing patches from image %d (idx: %d)', i, img_idx);
+    [patches, feats, ~] = sampleRandomPatches(img_idx, ds, ds.params.seed_patches_per_image);
+
+    img_id_col = ones(ds.params.seed_patches_per_image,1) * img_idx;
+    patches_pos = [[patches.x1]' [patches.x2]' [patches.y1]' [patches.y2]'];
+
     %append
-    initPatches = [initPatches new_patches];
-    initFeats = [initFeats; new_feats];
+    image_patches(i).features = feats';
+    image_patches(i).patches = [img_id_col patches_pos]';
+
+    %fprintf('\n1rst patch of image %d, feature: %f, position x1 %d',img_idx, feats(1,10), patches_pos(1,1));
   end
+  toc;
   
-  initPatches = initPatches';
+  initFeats = [image_patches.features]';
+  patches = [image_patches.patches]';
   
-  % normalizing candidate clusters
-  centers = bsxfun(@rdivide,bsxfun(@minus,initFeats,mean(initFeats,2)),...
+  % normalizing candidate patches
+  initFeats = bsxfun(@rdivide,bsxfun(@minus,initFeats,mean(initFeats,2)),...
     sqrt(var(initFeats,1,2)).*size(initFeats,2));
   
   % save workspace
-  save('data/step1_workspace_state.mat');
+  save(data_step1_filename);
+  disp('saved workspace at step 1');
 else
-  disp('loading workspace state at step 1');
-  load('data/step1_workspace_state.mat');
+  disp('loading workspace at step 1');
+  load(data_step1_filename);
 end
 
 
@@ -56,67 +57,61 @@ nb_all_imgs = numel(ds.all_imgs_idx);
 % structure of the closest_patches matrix
 % [candidate_patch_id img_id img_patch_id dist]
 % colname = {'candidate_id' ,'img_id' ,'img_patch_id', 'dist'};
-closest_patches = [];
 dist_column_id = 3;
-candidate_column_id =1;
-image_column_id =2;
+candidate_column_id = 1;
+image_column_id = 2;
 
 
-%img_patches = zeros(nb_all_imgs * nb_init_clusters,5);
-parfor i = 1: nb_all_imgs
+% we first use a cell struct because of the parallel operator 'parfor'
+closest_patches = cell(nb_all_imgs,1);
+tic;
+for i = 1: nb_all_imgs
   img_id = ds.all_imgs_idx(i);
   
   fprintf('\nComputing KNN for image %d (%d)', img_id, i);
-  
-  % generate img id column
-  img_id_column = ones(nb_init_clusters,1) * img_id;
-  
+ 
   % get the nearest patch in the image for each patch candidate  (+ its distance)
-  % => in the NN process, 2 NN patches could not be from the same image =>
-  % good
-  % get image path
+  % => ! 2 NN patches could not be from the same image => good
   img_path = ds.imgs(img_id).path;
-  [~, dist, patches_coordinates] = nn_cluster(img_path, centers, ds.params);
-  
-  %img_patches(1+(i-1) * nb_init_clusters  : i * nb_init_clusters, :) = [img_id_column patches_coordinates];
-  %img_patches = [img_patches; [img_id_column patches_coordinates]];
-  
-  % append
-  closest_img_patches = [img_id_column dist patches_coordinates];
-  
-  closest_patches = [closest_patches; closest_img_patches];
+  [~, dist, patches_coordinates] = nn_cluster(img_path, initFeats, ds.params);  
+
+  closest_patches{i} = [(1:nb_init_clusters)' ones(nb_init_clusters,1) * img_id dist  patches_coordinates];
+%  closest_patches(i)= [ ... 
+    %(1:nb_init_clusters)'...                        % generate cluster_id column
+    %ones(nb_init_clusters,1) * img_id ....        % generate img id column
+  %  dist patches_coordinates ...  
+    %ones(nb_init_clusters,1) * ismember(img_id,pos_idx)... % generate label column
+ % ];
 end
+toc;
 
-% add a 'cluster_id' column
-closest_patches = [repmat((1:nb_init_clusters), 1, nb_all_imgs)' closest_patches];
-
-%(debug) add label 
-%closest_patches = [closest_patches ismember(closest_patches(:,2), pos_idx)];
-
+closest_patches = cell2mat(closest_patches);
 
 %%
 % Get only the top 20 nearest neighbors of each patch
 nb_neighbors = 20;
-nb_neighbors = min(nb_all_imgs,nb_neighbors);
+nb_neighbors = min(nb_all_imgs, nb_neighbors);
 
 % each row = 1 candidate, each column k the kth nearest neighbor idx
-top_nn_idx = [];
+top_nn_idx = zeros(nb_init_clusters, nb_neighbors);
 
 % (debug) each row = 1 candidate, each column k the dist of kth nearest neighbor idx
-top_nn_dist = [];
-
-parfor (i = 1:nb_init_clusters)
+% top_nn_dist = zeros(nb_init_clusters, nb_neighbors);
+tic;
+for (i = 1:nb_init_clusters)
   NN_patches_idx = find(closest_patches(:, candidate_column_id) == i);
   [top_dist , ord] = mink(closest_patches(NN_patches_idx, dist_column_id), nb_neighbors);
-  top_nn_idx = [top_nn_idx; NN_patches_idx(ord)'];
-  %top_nn_dist = [top_nn_dist; top_dist'];
+  top_nn_idx(i,:) = NN_patches_idx(ord)';
+  %top_nn_dist(i,:) = top_dist';
 end
-
+toc;
 % (debug) top_img_idx = vec2mat(closest_patches(top_nn_idx(:),image_column_id),nb_seed_candidates)';
 
 % each row = 1 cluster, each column k: 0 or 1 if the patch is labeled
 % positive or not
 top_nn_positive = vec2mat(ismember(closest_patches(top_nn_idx(:),image_column_id),pos_idx),nb_init_clusters)';
+
+%top_nn_similirarity = vec2mat(closest_patches(top_nn_idx(:),image_column_id),pos_idx),nb_init_clusters)';
 
 % compute purity of each cluster
 purity = sum(top_nn_positive,2);
@@ -131,41 +126,8 @@ purity = int8(purity * 100 / nb_neighbors);
 best_clusters_idx = sorted_idx(1:100);
 
 
-%%
-% formatting output data 
-%generate the clusters struct
-clusters = struct();
-for (i = 1 : numel(best_clusters_idx))
-  
-  % the centroids
-  centroid =  initPatches(best_clusters_idx(i)); 
-  centroid.patch_id = -1;
-  centroid.cluster_id = i;
-  clusters(i).centroid = centroid;
-  % the related Nearest neighboors patches [img_id, patch_id]
-  nn_patches = closest_patches(top_nn_idx(best_clusters_idx(i),:),[2 4:7]);
-  nn = struct();
-   for (j = 1: size(nn_patches,1))
-     nn(j).cluster_id = i;
-     nn(j).img_id = nn_patches(j,1);
-     nn(j).patch_id = j;
-     %nn(j).patch = nn_patches(j,2:end);
-     nn(j).x1 = nn_patches(j,2);
-     nn(j).x2 = nn_patches(j,3);
-     nn(j).y1 = nn_patches(j,4);
-     nn(j).y2 = nn_patches(j,5);
-     nn(j).label = ismember(nn_patches(j,1),pos_idx);
-   end
-  clusters(i).nn = nn;
-  
-  % purity 
-  clusters(i).purity = purity(best_clusters_idx(i));
+if (ds.params.knn_html_visualization)
+  KNN_visualisation
 end
-
-
-% generate a html page to see the results at this stage
-% (too many params...)
-generate_html_view(clusters, ds.imgs);
-
 
 % STEP 3 : to continue...

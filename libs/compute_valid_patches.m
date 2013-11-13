@@ -1,9 +1,14 @@
  % compute patches of an image 
  % and return only valid ones (+ removing useless ones)
  
-function [patches, features, pyramid] = compute_valid_patches(img_path, params)
+function [patches, features, pyramid] = compute_valid_patches(img_path, params, normalizing)
   
-  fprintf('\n Generating patches + computing features for image %s\n', img_path);
+  % per default, we normalize features
+  if nargin < 3
+    normalizing = 1;
+  end
+  
+  fprintf('\nGenerating patches + computing features for image %s', img_path);
   im = im2double(imread(img_path));
   
   % construct HOG pyramid 
@@ -17,13 +22,14 @@ function [patches, features, pyramid] = compute_valid_patches(img_path, params)
   raw_size = size(features,1);
 
   % remove invalid patches (because too low gradient)
-  invalid =(gradsums<9);
+  invalid =(gradsums<2);
   features(invalid,:) = [];
   patches(invalid,:) =  [];
-  %patch_idx(invalid,:) = [];
-    
+  %patch_idx(invalid,:) = [];    
   fprintf('\nthrew out %d patches / %d', sum(invalid), raw_size);
   
-  % normalize remaining features
-  features = bsxfun(@rdivide,bsxfun(@minus,features,mean(features,2)),sqrt(var(features,1,2)).*size(features,2));
+  if (normalizing)
+    % normalize remaining features
+    features = bsxfun(@rdivide,bsxfun(@minus,features,mean(features,2)),sqrt(var(features,1,2)).*size(features,2));
+  end
 end

@@ -3,6 +3,8 @@ clear;
 % load configuration
 config();
 
+addpath(fullfile('./libs/freezeColors'));
+
 global ds;
 ds.params = struct(..., 
   'experiment_name', 'exp1',...%<-- NAME OF THE EXPERIMENT: IMPORTANT to differenciate experimental saved results
@@ -32,28 +34,30 @@ ds.params = struct(...,
 %prepare_data();
 
 %load imgs data
-load('data/carldata.mat');
+load('data/paris_data.mat');
 
 ds.imgs = imgs;
 
-i = find_image_by_name(ds.imgs,'48.866799_2.359082_270_-004');
+
+
+i = find_image_by_name(ds.imgs,'11260_95307');
 img_path = ds.imgs(i).path;
+I = imread(img_path);
+seg = pf.segment(I, 2, 200, 200);
 
-I = im2double(imread(img_path));
-tic;
-pyramid = constructFeaturePyramidForImg(I, ds.params);
-toc;
-disp(pyramid);
-
-tic;
-%for each patch of every level + every index (= 15556 patches for each 537 z 936 image) 1of a given level get related features (2112 Features) + gradientsum
-[features, levels, indexes,gradsums] = unentanglePyramid(pyramid, ds.params);
-toc;
-
-invalid=(gradsums<9);
+regionprops(seg,'Area');
+regionprops(seg,'Centroid');
+regionprops(seg,'BoundingBox');
 
 
+ha = tight_subplot(2,1);
 
-disp(sum(invalid));  
-fprintf('\nthrew out %d patches',sum(invalid));
-  
+axes(ha(1));
+imshow(I);
+
+axes(ha(2));
+nb_colors = max(max(seg));
+A = hsv(nb_colors);
+A = A(randperm(size(A,1)),:)
+imshow(seg,A);
+

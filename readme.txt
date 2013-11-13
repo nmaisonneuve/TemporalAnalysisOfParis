@@ -1,4 +1,5 @@
 
+code from Carl & 
 %%% INSTALL
 
 >cd libs/hog
@@ -13,4 +14,4 @@ check config.m
 
 %% RUNNING
 
-main.m
+run experimentX.m

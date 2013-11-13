@@ -3,6 +3,8 @@ clear;
 % load configuration
 config();
 
+addpath(fullfile('./libs/freezeColors'));
+
 global ds;
 ds.params = struct(..., 
   'experiment_name', 'exp1',...%<-- NAME OF THE EXPERIMENT: IMPORTANT to differenciate experimental saved results
@@ -32,28 +34,74 @@ ds.params = struct(...,
 %prepare_data();
 
 %load imgs data
-load('data/carldata.mat');
+load('data/paris_data.mat');
 
 ds.imgs = imgs;
 
-i = find_image_by_name(ds.imgs,'48.866799_2.359082_270_-004');
-img_path = ds.imgs(i).path;
+test_parameters = 1;
 
-I = im2double(imread(img_path));
-tic;
-pyramid = constructFeaturePyramidForImg(I, ds.params);
-toc;
-disp(pyramid);
-
-tic;
-%for each patch of every level + every index (= 15556 patches for each 537 z 936 image) 1of a given level get related features (2112 Features) + gradientsum
-[features, levels, indexes,gradsums] = unentanglePyramid(pyramid, ds.params);
-toc;
-
-invalid=(gradsums<9);
-
-
-
-disp(sum(invalid));  
-fprintf('\nthrew out %d patches',sum(invalid));
+if (test_parameters)
+  % 10899_4705
+  i = find_image_by_name(ds.imgs,'11260_95307');
+  img_path = ds.imgs(i).path;
+  I = imread(img_path);
+  smooth = 0:2:6;
+  min_component= 50:50:250;
+  for i = 1:numel(smooth)
+    for j = 1:numel(min_component)
+    seg{i,j} = pf.segment(I, smooth(i), 200, min_component(j));
+    end
+  end
+  nb_rows = numel(smooth)+1;
+  nb_cols = numel(min_component);
+  ha = tight_subplot(nb_rows,nb_cols);
+  for i = 1:nb_rows 
+    for j = 1:nb_cols
+      %idx = i + (j-1) * nb_rows;
+      idx = j + (i-1) * nb_cols;
+      fprintf('\n%d, %d, %d',idx, i , j);
+      axes(ha(idx));
+      if (i == 1)
+        imshow(I);
+      else
+        nb_colors = max(max(seg{i-1,j}));
+        A = hsv(nb_colors);
+        A = A(randperm(size(A,1)),:)
+        imshow(seg{i-1,j},A);
+        freezeColors;
+      end
+    end
+  end
   
+else
+  nb_img_idx = 10; 
+  sample = randsample(numel(ds.imgs), nb_img_idx);
+   
+  for i = 1:nb_img_idx
+    img_path = ds.imgs(sample(i)).path;
+    org{i} = imread(img_path);
+    seg{i} = pf.segment(  org{i}, 3, 100, 200);   
+  end
+  
+  nb_rows = nb_img_idx;
+  nb_cols = 2;
+  ha = tight_subplot(nb_rows,nb_cols);
+  for i = 1:nb_rows 
+    for j = 1:nb_cols
+      %idx = i + (j-1) * nb_rows;
+      idx = j + (i-1) * nb_cols;
+      fprintf('\n%d, %d, %d',idx, i , j);
+      axes(ha(idx));
+      if (j == 1)
+        imshow(org{i});
+      else
+        nb_colors = max(max(seg{i}));
+        A = hsv(nb_colors);
+        A = A(randperm(size(A,1)),:)
+        imshow(seg{i},A);
+        freezeColors;
+      end
+    end
+  end
+  
+end

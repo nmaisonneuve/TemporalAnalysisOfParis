@@ -1,6 +1,11 @@
+% EXPERIMENT 1
+% Discovering visual elements from old buildings
 
+
+% clear workspace
 clear;
-% load configuration
+
+%%%%% SETUP PARAMETERS FOR THIS EXPERIMENT
 config();
 
 global ds;
@@ -26,34 +31,34 @@ ds.params = struct(...,
   'fixedDecisionThresh', -1.002,...
   'levelFactor', 2, ... % number of levels for pyramid HOG 
   'sampleBig', 0,...
-  'knn_html_visualization',1);
+  'knn_html_visualization',1); % do we generate KNN HTML visualisation?
 
-%preprocess data and save the result into a .mat file.
-%prepare_data();
+
+%%%%% SETUP DATA FOR THIS EXPERIMENT
 
 %load imgs data
-load('data/carldata.mat');
-
+load('data/paris_data.mat');
 ds.imgs = imgs;
 
-i = find_image_by_name(ds.imgs,'48.866799_2.359082_270_-004');
-img_path = ds.imgs(i).path;
-
-I = im2double(imread(img_path));
-tic;
-pyramid = constructFeaturePyramidForImg(I, ds.params);
-toc;
-disp(pyramid);
-
-tic;
-%for each patch of every level + every index (= 15556 patches for each 537 z 936 image) 1of a given level get related features (2112 Features) + gradientsum
-[features, levels, indexes,gradsums] = unentanglePyramid(pyramid, ds.params);
-toc;
-
-invalid=(gradsums<9);
+% split data into pos + neg dataset
+positive_period = [1]; % old time period
+pos_idx = find(ismember([ds.imgs.label], positive_period));
+neg_idx = setdiff(1:numel(ds.imgs), pos_idx);
 
 
+% we actually take a subset/sample for the experiment
+if (numel(pos_idx)> ds.params.pos_sample_size)
+  pos_idx = pos_idx(randsample(numel(pos_idx),ds.params.pos_sample_size));
+end
+if (numel(neg_idx) > ds.params.neg_sample_size)
+  neg_idx = neg_idx(randsample(numel(neg_idx),ds.params.neg_sample_size));
+end
 
-disp(sum(invalid));  
-fprintf('\nthrew out %d patches',sum(invalid));
-  
+% we aggregate these 2 datasets into the dataset used for the experiment
+ds.all_imgs_idx = [pos_idx, neg_idx];
+
+disp('dataset for experiment done. ');
+
+
+%% EXECUTE ALGO 
+main;

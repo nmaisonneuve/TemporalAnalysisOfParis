@@ -1,12 +1,12 @@
 var template;
-
+var experience_name = 'exp2';
 visualize = function(clusters){
   $("#clusters").empty();
   for (var i  = 0 ; i < clusters.length ; i++){
     cluster = clusters[i];
     cluster.id = i + 1;
-
-    var d = _.template(template,{cluster: cluster});
+    console.log(cluster);
+    var d = _.template(template,{exp: experience_name, cluster: cluster});
     $("#clusters").append(d);
   }
 }
@@ -14,7 +14,7 @@ visualize = function(clusters){
 $(function() {
   template = $("#cluster_template").html();
 
-  $.getJSON("../results/clusters.json", function(_clusters) {
+  $.getJSON("../results/"+experience_name+"/clusters_knn.json", function(_clusters) {
     clusters = _clusters;
     visualize(clusters);   
   });

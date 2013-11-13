@@ -12,6 +12,7 @@ canoSc = pyramid.canonicalScale;
 for i = 1 : length(selected)
   selInd = selected(i);
   levelPatch = getLevelPatch(prSize, pcSize, level(selInd), pyramid);
+  
   levSc = pyramid.scales(level(selInd));
   x1 = indexes(selInd, 2);
   y1 = indexes(selInd, 1);
@@ -19,11 +20,20 @@ for i = 1 : length(selected)
   yoffset = floor((y1 - 1) * pyramid.sbins * levSc / canoSc) + 1;
   thisPatch = levelPatch + [xoffset xoffset yoffset yoffset];
   
-  metadata(i).x1 = thisPatch(1);
-  metadata(i).x2 = thisPatch(2);
-  metadata(i).y1 = thisPatch(3);
-  metadata(i).y2 = thisPatch(4);
-  if(numel(im)<3)
+  
+ % patch_level_to_position(patches, pyramid, params)
+  
+%   metadata(i).x1 = thisPatch(1);
+%   metadata(i).x2 = thisPatch(2);
+%   metadata(i).y1 = thisPatch(3);
+%   metadata(i).y2 = thisPatch(4);
+
+   metadata(i).y1 = thisPatch(1);
+   metadata(i).y2 = thisPatch(2);
+   metadata(i).x1 = thisPatch(3);
+   metadata(i).x2 = thisPatch(4);
+
+   if(numel(im)<3)
     metadata(i).im = im.path;
     sz=im.imsize;
     metadata(i).size.ncols=sz(2);
@@ -42,8 +52,12 @@ for i = 1 : length(selected)
   metadata(i).trunc = false;
   % Pyramid information
   metadata(i).pyramid = [level(selInd) indexes(selInd, :)];
+
+  % NICO MODIF
   metadata(i) = clipPatchToBoundary(metadata(i));
 end
+
+
 end
 
 function levelPatch = getLevelPatch(prSize, pcSize, level, pyramid)

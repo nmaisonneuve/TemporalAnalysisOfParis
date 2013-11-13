@@ -1,5 +1,6 @@
 
 clear;
+
 % load configuration
 config();
 
@@ -10,7 +11,7 @@ ds.params = struct(...,
   'pos_sample_size', 100, ... % initial sample size % usually 2000 positive images is enough; sometimes even 1000 works
   'neg_sample_size', 300, ... % initial sample size % usually 2000 positive images is enough; sometimes even 1000 works   
   'seed_candidate_size', 100, ... %  ratio from the sample to get the number of images used to get seed patches candidates 
-  'seed_patches_per_image', 25,...  % -1 = no limit (cal's version: only use 25 patches per images?)
+  'seed_patches_per_image', 100,...  % -1 = no limit (cal's version: only use 25 patches per images?)
   'imageCanonicalSize', 400,...% images are resized so that their smallest dimension is this size.
   'patchCanonicalSize', {[80 80]}, ...% patches are extracted at this size.  Should be a multiple of sBins.
   'scaleIntervals', 8, ...% number of levels per octave in the HOG pyramid 
@@ -32,28 +33,26 @@ ds.params = struct(...,
 %prepare_data();
 
 %load imgs data
-load('data/carldata.mat');
-
+load('data/paris_data.mat');
 ds.imgs = imgs;
+idx = 18; %find_image_by_name(ds.imgs,'48.866799_2.359082_270_-004');
+img_path = ds.imgs(idx).path;
 
-i = find_image_by_name(ds.imgs,'48.866799_2.359082_270_-004');
-img_path = ds.imgs(i).path;
+[patches, features, ~] = sampleRandomPatches(idx, ds, ds.params.seed_patches_per_image);
+%end
 
-I = im2double(imread(img_path));
-tic;
-pyramid = constructFeaturePyramidForImg(I, ds.params);
-toc;
-disp(pyramid);
+candidates = [patches.x1; patches.x2; patches.y1; patches.y2]';
 
-tic;
-%for each patch of every level + every index (= 15556 patches for each 537 z 936 image) 1of a given level get related features (2112 Features) + gradientsum
-[features, levels, indexes,gradsums] = unentanglePyramid(pyramid, ds.params);
-toc;
+% normalize
+features = bsxfun(@rdivide,bsxfun(@minus,features,mean(features,2)),...
+    sqrt(var(features,1,2)).*size(features,2));
+  
 
-invalid=(gradsums<9);
+% get the nearest patch in the image for each patch candidate  (+ its distance)
+% => ! 2 NN patches could not be from the same image => good
 
+[~, dist, nn_patches] = nn_cluster(img_path, features, ds.params);  
 
-
-disp(sum(invalid));  
-fprintf('\nthrew out %d patches',sum(invalid));
+% test that these are the same patches
+fprintf('same patches?: %d',isequal(candidates,nn_patches));
   

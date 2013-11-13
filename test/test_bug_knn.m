@@ -1,5 +1,4 @@
 
-clear;
 % load configuration
 config();
 
@@ -32,28 +31,63 @@ ds.params = struct(...,
 %prepare_data();
 
 %load imgs data
-load('data/carldata.mat');
-
+load('data/paris_data.mat');
 ds.imgs = imgs;
 
-i = find_image_by_name(ds.imgs,'48.866799_2.359082_270_-004');
+i = 1;
 img_path = ds.imgs(i).path;
 
-I = im2double(imread(img_path));
-tic;
-pyramid = constructFeaturePyramidForImg(I, ds.params);
-toc;
-disp(pyramid);
 
-tic;
-%for each patch of every level + every index (= 15556 patches for each 537 z 936 image) 1of a given level get related features (2112 Features) + gradientsum
-[features, levels, indexes,gradsums] = unentanglePyramid(pyramid, ds.params);
-toc;
-
-invalid=(gradsums<9);
+[x,y,z]=size(imread(img_path));
 
 
+[patches, features, ~] = sampleRandomPatches(i, ds, ds.params.seed_patches_per_image);
+%end
 
-disp(sum(invalid));  
-fprintf('\nthrew out %d patches',sum(invalid));
+candidates = [patches.x1; patches.x2; patches.y1; patches.y2]';
+
+[nrows, ncols] = patch_size(candidates);
+
+candidates = [candidates nrows, ncols];
+
+% normalize
+features = bsxfun(@rdivide,bsxfun(@minus,features,mean(features,2)),...
+    sqrt(var(features,1,2)).*size(features,2));
+  
+
+%res=extract_patches(metadatas, imgs);
+
+%display_patches(metadata, imgs);
+
+% get the nearest patch in the image for each patch candidate  (+ its distance)
+% => ! 2 NN patches could not be from the same image => good
+
+[test_patches , test_features, pyramid] = compute_valid_patches(img_path, ds.params);
+  
+  
+  if(isempty(patches))
+    disp('ALERT NO patch FOUND ');
+    return;
+  end
+
+  % for each candidate what is the closest patche
+  % (and not for each patch what is the closest candidate)
+  % [closest_patches_idx, dist]=assigntoclosest(single(centroids),single(features_patches));
+  
+  [closest_patches_idx, dist]=assigntoclosest(features,test_features);
+  
+  % return patch info only from the closest patches
+  test_patches = test_patches(closest_patches_idx,:);
+ % features_patches(closest_patches_idx,:);
+  
+   pp = patch_level_to_position( test_patches, pyramid, ds.params);
+  
+  [nrows, ncols] = patch_size(pp);
+
+   pp = [pp nrows, ncols];
+   
+   equality = isequal(pp, candidates);
+   
+   fprintf('TEST NEAREST NEIGHBORS: equal patches = %d', equality);
+   
   

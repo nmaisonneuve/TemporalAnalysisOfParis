@@ -35,26 +35,27 @@
   <body>
     Clusters ordered by purity score (purity = ratio of patches from positive images in the cluster). For each cluster, the patches are ordered by dist to the centroid. nearest first.
     
-    <div class='fluid-container'>
-      <div id='clusters'></div>
+    <div >
+      <table id='clusters'></table>
     </div>
 
     <!-- HTML template -->
     <script  type="text/template"  id='cluster_template'>
-      <div  class="row" style='margin-top:20px;valign:top'>
-       <div class="col-md-1" style='font-size:10px;valign:top'>
+      <tr><td width='100'> 
             <b style='font-size:13px'>Cluster <%= cluster.id %></b>
             <br/> purity: <%= cluster.purity %>
+          </td>
+          <% if (cluster.centroid.img_id != undefined) { %>
+          <td>
             <br/> Centroid patch
-            <br/><img src='<%= centroid.img_id %>/patch_<%= centroid.patch_id %>.jpg' width='90' height='90' />
-        </div>
-
-        <div class="col-md-11">
+            <br/><img src='../results/<%= exp %>/images/<%= cluster.centroid.img_id %>/patch_<%= cluster.centroid.patch_id %>.jpg' width='90' height='90' />
+          </td>
+          <% } %>
+          <td>
          <% $.each(cluster.nn, function(idx,image){
             style = "color_"+image.label;
-         %><img src='../results/images/<%= image.img_id %>/patch_<%= image.patch_id %>.jpg' width='90' height='90' class='<%= style %>' title='from image:<%= image.img_id %>'/><% }) %>
-        </div>
-      </div> 
+         %><img src='../results/<%= exp %>/images/<%= image.img_id %>/patch_<%= image.patch_id %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= image.img_id %>'/><% }) %></td>
+       
     </script>
   </body>
 </html>
