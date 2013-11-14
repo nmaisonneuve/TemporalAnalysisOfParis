@@ -13,7 +13,6 @@ function [patches, features, pyramid] = compute_valid_patches(img_path, params, 
   
   % construct HOG pyramid 
   pyramid = constructFeaturePyramid(im, params);
-
   [features, levels, indexes,gradsums] = unentanglePyramid(pyramid, params);
   
   %patch_idx = 1:numel(features);
@@ -26,6 +25,7 @@ function [patches, features, pyramid] = compute_valid_patches(img_path, params, 
   features(invalid,:) = [];
   patches(invalid,:) =  [];
   %patch_idx(invalid,:) = [];    
+  
   fprintf('\nthrew out %d patches / %d', sum(invalid), raw_size);
   
   if (normalizing)

@@ -65,9 +65,14 @@ disp('dataset for experiment done. ');
 
 
 %%% MAIN ALGO
-step1_todo = true;
-step2_todo = true;
+
+loaded_state = 2;
 main;
 
+%if (ds.params.knn_html_visualization)
+%  KNN_visualisation
+%end
+
+patch_cooccurence;
 
 %%% POST PROCESSING

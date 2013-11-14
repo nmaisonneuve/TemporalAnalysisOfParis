@@ -2,11 +2,11 @@ var template;
 
 visualize = function(clusters){
   $("#clusters").empty();
-  for (var i  = 0 ; i < 100 ; i++){
+  for (var i  = 0 ; i < 1000 ; i++){
     cluster = clusters[i];
     //cluster.id = i + 1;
     console.log(cluster);
-    var d = _.template(template,{exp: experiment_name, cluster: cluster});
+    var d = _.template(template,{exp: experiment_name, sim: cluster});
     $("#clusters").append(d);
   }
 }
@@ -24,10 +24,10 @@ $(function() {
    console.log(experiment_name);
   if (experiment_name == '')
     experiment_name = 'exp1';
-  $("#experiment_id").html("Experiment : "+experiment_name);
+  $("#experiment_id").html("experiment "+experiment_name);
 
   console.log(experiment_name);
-  $.getJSON("../results/"+experiment_name+"/nn/clusters_knn.json", function(_clusters) {
+  $.getJSON("../results/"+experiment_name+"/cooccurence/cooccurrence.json", function(_clusters) {
     clusters = _clusters;
     visualize(clusters);   
   });

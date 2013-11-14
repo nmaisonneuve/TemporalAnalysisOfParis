@@ -1,19 +1,21 @@
 % check position validity of patches compared to image size
 function patch_valid(patches, imgs)
+
+  % sorted by image_id
   [~, sorted_img_idx] = sort(patches(:,1));
   patches = patches(sorted_img_idx,:);
   
   last_idx = -1;
   nrows = 0;
   ncols =0;
+  
   for (i = 1:size(patches,1))
     img_id = patches(i,1);
     
     % load image if new image idx
-    if (last_idx ~= img_id)
-      I = imread(imgs(img_id).path);
-      last_idx = img_id;
-      [nrows , ncols,~] = size(I);
+    if (last_idx ~= img_id) 
+      [nrows , ncols,~] = size(imread(imgs(img_id).path));
+      last_idx = img_id;      
      % fprintf('\nimage %d - size : %d x %d', img_id, nrows, ncols);
     end
     

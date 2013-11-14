@@ -61,5 +61,5 @@ disp('dataset for experiment done. ');
 
 
 %% EXECUTE ALGO 
-step1_todo = true;
+step1_todo = 1;
 main;

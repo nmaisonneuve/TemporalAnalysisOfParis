@@ -13,4 +13,3 @@ B = [b(:, [1 3]) width height];
 C = rectint(A,B);
 
 
-t

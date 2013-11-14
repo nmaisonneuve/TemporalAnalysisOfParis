@@ -4,6 +4,10 @@ function save_img_patches(patches, imgs, dirname)
   % we sort by imidx (image idx) to not load the same image several times
   [~, sorted_patch_idx] = sort(patches(:,1));
   
+  disp('save_img_patches');
+  disp(size(patches(:,1)));
+  disp(size(sorted_patch_idx));
+  
   % we modify the struct
   [width, height] = patch_size(patches(:,2:5));
   patches(:,2:5) = [patches(:,4) patches(:,2) width height];

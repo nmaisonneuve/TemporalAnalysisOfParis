@@ -18,15 +18,19 @@ for (i = 1:size(clusters_co,1))
 
   % image co-occurrency:  present in the same images ?
   nb_images = numel(intersect(patches_a(:,2), patches_b(:,2)));
+  
   clusters_co(i,3) = size(patches_a,1) - nb_images;
+  
   %fprintf('\n number of patches A = %d, B = %d , inter = %d :', size(patches_a,1),size(patches_b,1),nb_images);
   
   % overlapping inside the same images?
   % TODO
 end
-[~, sorted_idx ] = sort(clusters_co(:,3));
 
+% we sorted by co-occurence
+[~, sorted_idx ] = sort(clusters_co(:,3));
 clusters_co = clusters_co(sorted_idx,:);
 
+%particular example : finding co-occurance of the cluster couple {741,1001}
+% clusters_co(find(ismember(clusters_co(:,1:2), [741 1001], 'rows')),:)
 
-clusters_co(find(ismember(clusters_co(:,1:2), [741 1001], 'rows')),:)

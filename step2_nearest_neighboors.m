@@ -37,7 +37,7 @@ closest_patches = cell2mat(closest_patches);
 
 %%
 % Get only the top X nearest neighbors of each patch
-nb_neighbors = 20;
+nb_neighbors = 100;
 nb_neighbors = min(nb_all_imgs, nb_neighbors);
 
 % each row = 1 candidate, each column k the kth nearest neighbor idx
@@ -68,7 +68,7 @@ purity = sum(top_nn_positive,2);
 purity = int8(purity * 100 / nb_neighbors);
 
 %rank clusters by purity
-[~, sorted_idx] = sort(purity, 'descend');
+[~, sorted_idx] = sort(purity,1, 'descend');
 
 %display the first 100 clusters (candidate + NN patches) 
 nb_top_clusters = min(nb_init_clusters, 1000);

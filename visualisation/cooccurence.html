@@ -16,7 +16,7 @@
 
     <script src="jquery.min.js"></script>
     <script src="underscore-min.js"></script>
-    <script src="cooccurrence.js"></script>
+    <script src="cooccurence.js"></script>
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
@@ -24,10 +24,11 @@
 
   </head>
   <body>
-    <h1><div id='experiment_id'></div></h1>
+    <h2>Image co-occurence of candidate patches for <span id='experiment_id'></span></h2>
     <ul>
-    <li>to change the experiment, add the 'experiment' parameter e.g. index.html?experiment=exp1</li>
-
+    <li>for each pairwise of candidate patches, we compute their co-occurency frequency on their respective nearest neighboors at the image level. How many shared images do their nearest neighboors have in common.  More fine-grain co-occurency analysis (e.g. overlapping patches on the same image) will be done later</li>
+    <li>add the 'experiment' parameter e.g. index.html?experiment=exp1</li>
+</ul>
     
     <div >
       <table id='clusters'></table>
@@ -37,15 +38,15 @@
     <script  type="text/template"  id='cluster_template'>
       <tr><td width='100'> 
    
-          <b style='font-size:13px'>Cluster <%= patch_a.id %></b>
-            <br/><img src='../results/<%= exp %>/cooccurence/images/<%= patch_a.img_path[0] %>/cluster_<%= patch_a.img_path[1] %>_patch_<%= patch_a.img_path[2] %>.jpg' width='90' height='90' />
+          <span style='font-size:8px'>id <%= sim.patch_a[1] %> (from img <%= sim.patch_a[0] %>)</span>
+            <br/><img src='../results/<%= exp %>/cooccurence/images/<%= sim.patch_a[0] %>/cluster_<%= sim.patch_a[1] %>_patch_<%= sim.patch_a[2] %>.jpg' width='90' height='90'  />
           </td>
           <td width='100'> 
    
-          <b style='font-size:13px'>Cluster <%= patch_b.id %></b>
-            <br/><img src='../results/<%= exp %>/cooccurence/images/<%= patch_b.img_path[0] %>/cluster_<%= patch_b.img_path[1] %>_patch_<%= patch_b.img_path[2] %>.jpg' width='90' height='90' />
+          <span style='font-size:8px'>id <%= sim.patch_b[1] %> (from img <%= sim.patch_b[0] %>)</span>
+            <br/><img src='../results/<%= exp %>/cooccurence/images/<%= sim.patch_b[0] %>/cluster_<%= sim.patch_b[1] %>_patch_<%= sim.patch_b[2] %>.jpg' width='90' height='90' />
           </td>
-          <td><%= co_occurence %></td>
+          <td><%= (100-sim.co_occurence) %>/100</td>
        
     </script>
   </body>

@@ -138,7 +138,7 @@ end
 function patInds = cleanUpOverlappingPatches(patches, thresh, probs)
 
     % sort patch per gradient probability (most interesting first)
-    [~, probInds] = sort(probs, 'descend');
+    [~, probInds] = sort(probs,1, 'descend');
     
 patInds = zeros(1, length(patches));
 indCount = 0;
