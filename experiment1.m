@@ -13,7 +13,7 @@ ds.params = struct(...,
   'experiment_name', 'exp1',...%<-- NAME OF THE EXPERIMENT: IMPORTANT to differenciate experimental saved results
   'num_train_its', 5, ... %define the number of training iterations used.  The paper uses 3; sometime %using as many as 5 can result in minor improvements.
   'pos_sample_size', 100, ... % initial sample size % usually 2000 positive images is enough; sometimes even 1000 works
-  'neg_sample_size', 300, ... % initial sample size % usually 2000 positive images is enough; sometimes even 1000 works   
+  'neg_sample_size', 400, ... % initial sample size % usually 2000 positive images is enough; sometimes even 1000 works   
   'seed_candidate_size', 100, ... %  ratio from the sample to get the number of images used to get seed patches candidates 
   'seed_patches_per_image', 25,...  % -1 = no limit (cal's version: only use 25 patches per images?)
   'imageCanonicalSize', 400,...% images are resized so that their smallest dimension is this size.
@@ -61,4 +61,5 @@ disp('dataset for experiment done. ');
 
 
 %% EXECUTE ALGO 
+step1_todo = true;
 main;

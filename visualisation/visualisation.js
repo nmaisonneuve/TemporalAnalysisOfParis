@@ -1,5 +1,5 @@
 var template;
-var experience_name = 'exp2';
+var experience_name = 'exp1';
 visualize = function(clusters){
   $("#clusters").empty();
   for (var i  = 0 ; i < clusters.length ; i++){

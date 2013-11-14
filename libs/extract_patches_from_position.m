@@ -35,7 +35,7 @@
 
     else
       % filename = sprintf('results/clusters/%d/patch_%d_%d.jpg', cluster_id, img_id, patch_id);
-    filename = sprintf('results/%s/images/%d/patch_%d.jpg',ds.params.experiment_name,img_id, patch_id);       
+    filename = sprintf('results/%s/images/%d/cluster_%d_patch_%d.jpg',ds.params.experiment_name,img_id, cluster_id, patch_id);       
     imwrite(I2, filename);
     end
     %imshow(I2),figure

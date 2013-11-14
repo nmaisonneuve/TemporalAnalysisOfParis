@@ -5,7 +5,13 @@
   for (i = 1 : numel(best_clusters_idx))
 
     % the centroids
-    centroid =  initPatches(best_clusters_idx(i)); 
+    centroid_pos = patches(best_clusters_idx(i),:);
+   
+    centroid.x1 = centroid_pos(2);
+    centroid.x2 = centroid_pos(3);
+    centroid.y1 = centroid_pos(4);
+    centroid.y2 = centroid_pos(5);
+    centroid.img_id = centroid_pos(1);
     centroid.patch_id = -1;
     centroid.cluster_id = i;
     clusters(i).centroid = centroid;
@@ -30,20 +36,21 @@
   end
 
  experiment_dir = sprintf('results/%s',ds.params.experiment_name);
-  
-rmdir(experiment_dir,'s')
+ if (exist(experiment_dir))
+  rmdir(experiment_dir,'s')
+ end
 
 % create dir to save results from this experiment
 mkdir(experiment_dir);
 mkdir(sprintf('results/%s/images',ds.params.experiment_name)); 
  
 %extract patchs from images
-a = [clusters.centroid];
-oldField = 'imidx';
-newField = 'img_id';
-[a.(newField)] = a.(oldField);
-a = rmfield(a,oldField);
-extract_patches_from_position([a], imgs);
+%a = [clusters.centroid];
+%oldField = 'imidx';
+%newField = 'img_id';
+%[a.(newField)] = a.(oldField);
+%a = rmfield(a,oldField);
+extract_patches_from_position([clusters.centroid], imgs);
 extract_patches_from_position([clusters.nn], imgs);
 
 % save clusters.json

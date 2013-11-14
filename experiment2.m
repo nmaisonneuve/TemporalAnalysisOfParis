@@ -43,9 +43,12 @@ load('data/paris_data.mat');
 ds.imgs = imgs;
 
 % split data into pos + neg dataset
-positive_periods = [6 7 8]; % recent time periods (newish buildings)
+positive_periods = [6]; % recent time periods (newish buildings)
+negative_periods = [1];
 pos_idx = find(ismember([ds.imgs.label], positive_periods));
-neg_idx = setdiff(1:numel(ds.imgs), pos_idx);
+
+neg_idx = find(ismember([ds.imgs.label], negative_periods));
+
 
 % we actually take a subset/sample for the experiment
 if (numel(pos_idx)> ds.params.pos_sample_size)
@@ -62,6 +65,8 @@ disp('dataset for experiment done. ');
 
 
 %%% MAIN ALGO
+step1_todo = true;
+step2_todo = true;
 main;
 
 
