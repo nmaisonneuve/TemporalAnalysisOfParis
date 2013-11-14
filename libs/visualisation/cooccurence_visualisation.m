@@ -8,18 +8,30 @@
   
   top_sim = min(size(clusters_co,1), 1000);
   similarity = struct();
-  for (i = 1 :  top_sim)
-  
+  for (i = 1:top_sim)
+    
+    coo = clusters_co(i,:);
+    
+    patch_A = patches(coo(1),:);
+    
     patch_a = struct();
+    patch_a.id = clusters_co(i,1);
+    patch_a.img_path =[patch_A(1) coo(1) coo(1)];
+    
+    patch_B = patches(coo(2),:);
+    
+    
     patch_b = struct();
     
-    patch_a.id = clusters_co(i,1);
+    
+  
+     
     patch_b.id = clusters_co(i,2);
-           
-    pos = patches(cluster_a_idx,:);
-    patch_a.img_id =  pos(1);
-    patch_a.patch_id =  patch_a.id;
-    patch_a.cluster_id =  patch_a.id;
+          
+   
+
+        
+        
     patch_a.x1 = pos(2);
     patch_a.x2 = pos(3);
     patch_a.y1 = pos(4);
@@ -47,8 +59,9 @@ mkdir(root_dir);
 % generate images
 img_dir = [root_dir '/images'];
 mkdir(img_dir); 
-extract_patches_from_position([similarity.patch_a], imgs, img_dir);
-extract_patches_from_position([similarity.patch_b], imgs, img_dir);
+
+save_img_patches([similarity.patch_a], imgs, img_dir);
+
 
 % save co_occurrence.json
 json_file = [root_dir '/co_occurrence.json'];

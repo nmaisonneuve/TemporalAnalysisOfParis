@@ -1,0 +1,28 @@
+The class WFilter provides utilities to compute the whitening of feature 
+patches. I precomputed the whitening matrix for HOGs (31 dimensions) on 
+PASCAL 2012.
+
+To whiten patches do:
+
+>> load('WF.mat');
+>> whitened_patch = WF.filter2classifLDA(your_patch);
+
+The first call to WF.filter2classifLDA is slow as it computes the whitening 
+matrix for a specific patch size and cache it. The successive calls will be
+faster. Thus you should make sure you process all patches of the same size in a row.
+
+To compute a new general whitening matrix just do:
+
+>> WF = WFilter(max_filter_size, @your_feature_function);
+>> WF.processDirectory('path_to_image_folder');
+
+or:
+
+>> WF.processImage(image_matrix);
+
+- max_filter_size has 2 elements [y x]: it is the maximum patch size you aim to
+whiten.
+- your_feature_function: is the function returning your features. It should take
+a color image matrix of type double and return a struct with a field 'feat' 
+which should be a cell containing your features at different scales.
+
