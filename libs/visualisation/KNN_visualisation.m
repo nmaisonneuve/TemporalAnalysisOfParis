@@ -2,32 +2,32 @@
   % formatting output data 
   %generate the clusters struct
   clusters = struct();
+  
+  patches_to_crops = [];
+  
   for (i = 1 : numel(best_clusters_idx))
-
+  
+    clusters(i).id = best_clusters_idx(i);
+    
     % the centroids
     centroid_pos = patches(best_clusters_idx(i),:);
-   
-    centroid.x1 = centroid_pos(2);
-    centroid.x2 = centroid_pos(3);
-    centroid.y1 = centroid_pos(4);
-    centroid.y2 = centroid_pos(5);
-    centroid.img_id = centroid_pos(1);
-    centroid.patch_id = -1;
-    centroid.cluster_id = i;
+    
+    centroid.position = centroid_pos(:);
+    centroid.img_path = [centroid_pos(1)  i -1];
     clusters(i).centroid = centroid;
+    
+    tmp = [centroid_pos i -1];
+    patches_to_crops = [patches_to_crops; tmp];
+    
     % the related Nearest neighboors patches [img_id, patch_id]
     nn_patches = closest_patches(top_nn_idx(best_clusters_idx(i),:),[2 4:7]);
+    tmp = [nn_patches ones(size(nn_patches,1),1)*i (1:size(nn_patches,1))'];
+    patches_to_crops = [patches_to_crops; tmp];
     nn = struct();
      for (j = 1: size(nn_patches,1))
-       nn(j).cluster_id = i;
-       nn(j).img_id = nn_patches(j,1);
-       nn(j).patch_id = j;
-       %nn(j).patch = nn_patches(j,2:end);
-       nn(j).x1 = nn_patches(j,2);
-       nn(j).x2 = nn_patches(j,3);
-       nn(j).y1 = nn_patches(j,4);
-       nn(j).y2 = nn_patches(j,5);
+       nn(j).img_path = [nn_patches(j,1), i, j]; %sprintf('%d/cluster_%d_patch_%d.jpg',  nn_patches(j,1), i, j);
        nn(j).label = ismember(nn_patches(j,1),pos_idx);
+     
      end
     clusters(i).nn = nn;
 
@@ -36,23 +36,22 @@
   end
 
  experiment_dir = sprintf('results/%s',ds.params.experiment_name);
- if (exist(experiment_dir))
-  rmdir(experiment_dir,'s')
- end
+
 
 % create dir to save results from this experiment
-mkdir(experiment_dir);
-mkdir(sprintf('results/%s/images',ds.params.experiment_name)); 
- 
-%extract patchs from images
-%a = [clusters.centroid];
-%oldField = 'imidx';
-%newField = 'img_id';
-%[a.(newField)] = a.(oldField);
-%a = rmfield(a,oldField);
-extract_patches_from_position([clusters.centroid], imgs);
-extract_patches_from_position([clusters.nn], imgs);
+root_dir = sprintf('results/%s/nn',ds.params.experiment_name);
+ if (exist(root_dir))
+  rmdir(root_dir,'s')
+ end 
+mkdir(root_dir);
+
+% extract images
+img_dir = [root_dir '/images'];
+mkdir(img_dir);
+
+save_img_patches(patches_to_crops, imgs, img_dir);
+%save_img_patches([clusters.nn], imgs, img_dir);
 
 % save clusters.json
-json_file = sprintf('results/%s/clusters_knn.json',ds.params.experiment_name);
+json_file = [root_dir '/clusters_knn.json'];
 savejson('',clusters,json_file);

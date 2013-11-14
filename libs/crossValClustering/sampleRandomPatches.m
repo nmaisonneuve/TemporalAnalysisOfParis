@@ -108,12 +108,11 @@ for i = 1 : numLevels
   feats = features(selectedPatInds, :);
   if ~isempty(metadata)
     
-    % sort patch per gradient probability (most interesting first)
-    [~, probInds] = sort(probs, 'descend');
+
     
     % remove overlapping patches (a patch overlapping a previous one is removed)
     patInds = cleanUpOverlappingPatches(metadata, ...
-      ds.params.patchOverlapThreshold, probInds);
+      ds.params.patchOverlapThreshold, probs);
    % fprintf('\nafter clean overlapping %d on %d initial patches',numel(patInds), numel(metadata));
     
     % Tree oclusion: remove patch with too much green inside
@@ -136,8 +135,11 @@ end
   end
 end
 
-function patInds = cleanUpOverlappingPatches(patches, thresh, probInds)
+function patInds = cleanUpOverlappingPatches(patches, thresh, probs)
 
+    % sort patch per gradient probability (most interesting first)
+    [~, probInds] = sort(probs, 'descend');
+    
 patInds = zeros(1, length(patches));
 indCount = 0;
 
@@ -151,7 +153,7 @@ nc = patches(1).y2 - patches(1).y1 + 1;
 %fprintf('\n row: %d x col: %d', nr, nc);
 
 patchArea = nr * nc;
-for i = 1 : length(probInds)
+for i = 1 : numel(probInds)
   p = patches(probInds(i));
   %fprintf('\n %d, %d,%d, %d',p.x1,p.x2, p.y1,p.y2); 
   subMaskArea = sum(sum(mask(p.x1:p.x2, p.y1:p.y2)));

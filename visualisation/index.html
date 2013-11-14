@@ -33,9 +33,15 @@
     </style>
   </head>
   <body>
-    Clusters ordered by purity score (purity = ratio of patches from positive images in the cluster). For each cluster, the patches are ordered by dist to the centroid. nearest first.
+    <h1><div id='experiment_id'></div></h1>
+    <ul>
+    <li>to change the experiment, add the 'experiment' parameter e.g. index.html?experiment=exp1</li>
+    <li>
+
+    Clusters ordered by purity score (purity = ratio of patches from positive images in the cluster). For each cluster, the patches are ordered by dist to the centroid. nearest first.</li>
     
     <div >
+
       <table id='clusters'></table>
     </div>
 
@@ -48,13 +54,13 @@
           <% if (cluster.centroid.img_id != undefined) { %>
           <td>
             <br/> Centroid patch
-            <br/><img src='../results/<%= exp %>/images/<%= cluster.centroid.img_id %>/cluster_<%= cluster.centroid.cluster_id %>_patch_<%= cluster.centroid.patch_id %>.jpg' width='90' height='90' />
+            <br/><img src='../results/<%= exp %>/nn/images/<%= cluster.centroid.img_path[0] %>/cluster_<%= cluster.centroid.img_path[1] %>_patch_<%= cluster.centroid.img_path[2] %>.jpg' width='90' height='90' />
           </td>
           <% } %>
           <td>
          <% $.each(cluster.nn, function(idx,image){
             style = "color_"+image.label;
-         %><img src='../results/<%= exp %>/images/<%= image.img_id %>/cluster_<%= image.cluster_id %>_patch_<%= image.patch_id %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= image.img_id %>'/><% }) %></td>
+         %><img src='../results/<%= exp %>/nn/images/<%= image.img_path[0] %>/cluster_<%= image.img_path[1] %>_patch_<%= image.img_path[2] %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= image.img_id %>'/><% }) %></td>
        
     </script>
   </body>
