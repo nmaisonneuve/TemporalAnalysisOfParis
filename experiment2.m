@@ -73,6 +73,6 @@ main;
 %  KNN_visualisation
 %end
 
-patch_cooccurence;
+%patch_cooccurence;
 
 %%% POST PROCESSING

@@ -21,10 +21,3 @@ addpath(fullfile('./test/'));
 if (matlabpool('size') == 0)
   matlabpool(3);
 end
-
-
-
-
-
-
-

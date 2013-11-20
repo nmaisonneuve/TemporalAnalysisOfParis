@@ -26,8 +26,8 @@
   <body>
     <h2>Image co-occurence of candidate patches for <span id='experiment_id'></span></h2>
     <ul>
-    <li>for each pairwise of candidate patches, we compute their co-occurency frequency on their respective nearest neighboors at the image level. How many shared images do their nearest neighboors have in common.  More fine-grain co-occurency analysis (e.g. overlapping patches on the same image) will be done later</li>
-    <li>add the 'experiment' parameter e.g. index.html?experiment=exp1</li>
+    <li>for each pairwise of candidate patches, we compute their co-occurence frequency on their respective nearest neighboors at the image level(*). How many shared images do their nearest neighboors have in common. <br/> (*) more fine-grain co-occurency analysis e.g. overlapping patches on the same image will be done later</li>
+    <li>to change experiment , add the 'experiment' parameter e.g. index.html?experiment=exp1</li>
 </ul>
     
     <div >
@@ -46,7 +46,7 @@
           <span style='font-size:8px'>id <%= sim.patch_b[1] %> (from img <%= sim.patch_b[0] %>)</span>
             <br/><img src='../results/<%= exp %>/cooccurence/images/<%= sim.patch_b[0] %>/cluster_<%= sim.patch_b[1] %>_patch_<%= sim.patch_b[2] %>.jpg' width='90' height='90' />
           </td>
-          <td><%= (100-sim.co_occurence) %>/100</td>
+          <td><%= sim.co_occurence   %>/100</td>
        
     </script>
   </body>

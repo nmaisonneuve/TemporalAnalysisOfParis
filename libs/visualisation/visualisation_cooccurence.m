@@ -17,10 +17,10 @@
     patch_A = patches(cluster_a_idx,:);
     patch_B = patches(cluster_b_idx,:);
     % cluster same image , potential bug
-    if (patch_A(1) == patch_B(1))
+   % if (patch_A(1) == patch_B(1))
       %disp('error warning same image: cluster idx');
       
-    else 
+   % else 
     patches_to_crops = [patches_to_crops; [patch_A cluster_a_idx -1]];
     patches_to_crops = [patches_to_crops; [patch_B cluster_b_idx -1]];
    
@@ -28,7 +28,7 @@
     similarity(j).patch_b = [patch_B(1) cluster_b_idx -1];
     similarity(j).co_occurence = clusters_co(i,3); 
     j = j +1;
-    end
+   % end
     
   end
 

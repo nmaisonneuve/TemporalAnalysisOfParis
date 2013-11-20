@@ -37,7 +37,7 @@ closest_patches = cell2mat(closest_patches);
 
 %%
 % Get only the top X nearest neighbors of each patch
-nb_neighbors = 100;
+nb_neighbors = 20;
 nb_neighbors = min(nb_all_imgs, nb_neighbors);
 
 % each row = 1 candidate, each column k the kth nearest neighbor idx
@@ -46,7 +46,8 @@ top_nn_idx = zeros(nb_init_clusters, nb_neighbors);
 % (debug) each row = 1 candidate, each column k the dist of kth nearest neighbor idx
 % top_nn_dist = zeros(nb_init_clusters, nb_neighbors);
 tic;
-for (i = 1:nb_init_clusters)
+parfor (i = 1:nb_init_clusters)
+  fprintf('\n find the top NN for cluster %d', i);
   NN_patches_idx = find(closest_patches(:, candidate_column_id) == i);
   [top_dist , ord] = mink(closest_patches(NN_patches_idx, dist_column_id), nb_neighbors);
   top_nn_idx(i,:) = NN_patches_idx(ord)';
@@ -71,7 +72,7 @@ purity = int8(purity * 100 / nb_neighbors);
 [~, sorted_idx] = sort(purity,1, 'descend');
 
 %display the first 100 clusters (candidate + NN patches) 
-nb_top_clusters = min(nb_init_clusters, 1000);
+nb_top_clusters = min(nb_init_clusters, 300);
 
 best_clusters_idx = sorted_idx(1:nb_top_clusters);
 

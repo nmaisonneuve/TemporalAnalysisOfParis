@@ -38,26 +38,64 @@ load('data/paris_data.mat');
 
 ds.imgs = imgs;
 
-
-
-i = find_image_by_name(ds.imgs,'11260_95307');
+i = 3; find_image_by_name(ds.imgs,'11260_95307');
 img_path = ds.imgs(i).path;
 I = imread(img_path);
-seg = pf.segment(I, 2, 200, 200);
+I = imresize(I, 1/2);
 
-regionprops(seg,'Area');
-regionprops(seg,'Centroid');
-regionprops(seg,'BoundingBox');
+seg = pf.segment(I, 2, 100, 50);
+disp(max(max(seg)));
+
+idx = 0:3;
+scale = 2.^(i/3);
+
+new_seg = seg;
+new_seg = remove_small_segment(seg,I,800);
+disp(max(max(new_seg)));
+%[seg2, am] = cleanupregion(seg, 20);
+
+disp(max(max(new_seg)));
+area = regionprops(new_seg,'Area');
+area = [area.Area];
+
+centroids = regionprops(new_seg,'Centroid');
+centroids = cat(1,centroids.Centroid);
+
+bb = regionprops(new_seg,'BoundingBox');
+bb = cat(1,bb.BoundingBox);
+
+size(bb)
+valid_area_idx = find((area>3000) | (area<40000))
+
+patches =[ones(numel(valid_area_idx),1) bb(valid_area_idx,:)];
 
 
-ha = tight_subplot(2,1);
+C = rectint(patches,patches);
+
+root_dir = 'superpixel';
+mkdir(root_dir);
+
+
+save_img_with_patches(patches, imgs, root_dir, 0);
+
+
+
+ha = tight_subplot(3,1);
 
 axes(ha(1));
 imshow(I);
 
 axes(ha(2));
-nb_colors = max(max(seg));
+nb_colors = max(max(new_seg));
 A = hsv(nb_colors);
-A = A(randperm(size(A,1)),:)
-imshow(seg,A);
+A = A(randperm(size(A,1)),:);
+A(1,:) = [ 0 0 0];
+imshow(new_seg,A);
+hold on;
+plot(centroids(:,1), centroids(:,2), 'b*');
+hold off;
+%axes(ha(3));
+
+
+%imshow(seg,A);
 

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Temporal Analysis of the heart of Paris</title>
+    <title>Discovery of visual element discriminative of a given period of time</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="nm">
@@ -24,9 +24,9 @@
     <style type="text/css">
       .color_3 {border: 2px solid #FF0080}
       .color_1 {border: 2px solid #D0F5A9}
-      .color_0 {border: 5px solid #F78181}
-      .color_3 {border: 5px solid #F7BE81}
-      .color_5 {border: 5px solid #FFFF00}
+      .color_0 {border: 2px solid #F78181}
+      .color_3 {border: 2px solid #F7BE81}
+      .color_5 {border: 2px solid #FFFF00}
      
 
        /* define margin as you see fit */
@@ -34,11 +34,20 @@
   </head>
   <body>
     <h1><div id='experiment_id'></div></h1>
+   
     <ul>
-    <li>to change the experiment, add the 'experiment' parameter e.g. index.html?experiment=exp1</li>
-    <li>
+ <li>Description: The top most discriminative clusters of visual elements coming from the facade of buildings in Paris</li>
+    <li>Label / discriminative attribute: <b>time period of building construction</b></li>
+    <li>Positive label / investigated time period: <b><span id='period_id' style='font-size:15px'></span> </b></li>
+      <li>Colored border of each visual element
+    <ul>
+    <li>Green =  visual element coming from a building of the investigated time period (positive label)</li>
+    <li>Red =  visual element coming from buildings of other time periods (negative label)</li>
+    </ul></li>
 
-    Clusters ordered by purity score (purity = ratio of patches from positive images in the cluster). For each cluster, the patches are ordered by dist to the centroid. nearest first.</li>
+    <li>Clusters ordered by purity score (purity ratio = nb of visual elements having a positive label / number of elements in the cluster). </li>
+ 
+  <li>to change the experiment, change {exp_name} in the url i.e.g index.html?experiment={exp_name}</li>
     
     <div >
 
@@ -51,16 +60,17 @@
             <b style='font-size:13px'>Cluster <%= cluster.id %></b>
             <br/> purity: <%= cluster.purity %>
           </td>
-          <% if (cluster.centroid.img_id != undefined) { %>
+          <% if (cluster.centroid.img_path != undefined) { %>
           <td>
-            <br/> Centroid patch
+            <br/> <span style='font-size:10px'> centroid </span>
             <br/><img src='../results/<%= exp %>/nn/images/<%= cluster.centroid.img_path[0] %>/cluster_<%= cluster.centroid.img_path[1] %>_patch_<%= cluster.centroid.img_path[2] %>.jpg' width='90' height='90' />
           </td>
           <% } %>
           <td>
-         <% $.each(cluster.nn, function(idx,image){
+         <% for (var i = 0; i< 20 ; i++) {
+            image = cluster.nn[i];
             style = "color_"+image.label;
-         %><img src='../results/<%= exp %>/nn/images/<%= image.img_path[0] %>/cluster_<%= image.img_path[1] %>_patch_<%= image.img_path[2] %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= image.img_id %>'/><% }) %></td>
+         %><img src='../results/<%= exp %>/nn/images/<%= image.img_path[0] %>/cluster_<%= image.img_path[1] %>_patch_<%= image.img_path[2] %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= image.img_id %>'/><% } %></td>
        
     </script>
   </body>

@@ -4,6 +4,8 @@ data_step1_filename = sprintf('data/step1_%s.mat',ds.params.experiment_name);
 data_step2_filename = sprintf('data/step2_%s.mat',ds.params.experiment_name);
 
 % loading workspace if required
+loaded_state_tmp2 = loaded_state;
+
 switch loaded_state
   case 2
     disp('loading workspace at step 2');
@@ -12,6 +14,8 @@ switch loaded_state
     disp('loading workspace at step 1');
     load(data_step1_filename);
 end
+
+loaded_state = loaded_state_tmp2;
 
 if (loaded_state < 1)
   step1_generate_patches;

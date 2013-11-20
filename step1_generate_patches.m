@@ -13,10 +13,10 @@
 image_patches = struct(); 
   parfor i = 1: numel(seed_pos_idx)  
     img_idx = seed_pos_idx(i);
-    fprintf('\n\nComputing patches from image %d (idx: %d)', i, img_idx);
+   
     [patches, feats, ~] = sampleRandomPatches(img_idx, ds, ds.params.seed_patches_per_image);
-
-    img_id_col = ones(ds.params.seed_patches_per_image,1) * img_idx;
+    fprintf('\n%d patches extracted from image %d (idx: %d)',size(patches,1), i, img_idx);
+    img_id_col = ones(size(patches,1),1) * img_idx;
     patches_pos = [[patches.x1]' [patches.x2]' [patches.y1]' [patches.y2]'];
 
     %append
