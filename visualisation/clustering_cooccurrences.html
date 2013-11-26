@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Co-occurence clustering Discovery of visual element discriminative of a given period of time</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="nm">
+
+  <!-- Le styles -->
+
+  <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="http://getbootstrap.com/examples/offcanvas/offcanvas.css" rel="stylesheet">
+
+  <script src="jquery.min.js"></script>
+  <script src="underscore-min.js"></script>
+  <script src="clustering_cooccurrences.js"></script>
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+  <script src="assets/js/html5shiv.js"></script>
+  <![endif]-->
+  <style type="text/css">
+      .color_3 {border: 2px solid #FF0080}
+      .color_1 {border: 2px solid #D0F5A9}
+      .color_0 {border: 2px solid #F78181}
+      .color_3 {border: 2px solid #F7BE81}
+      .color_5 {border: 2px solid #FFFF00}
+     
+
+       /* define margin as you see fit */
+    </style>
+</head>
+<body>
+  <h1>
+    <div id='experiment_id'></div>
+  </h1>
+
+  <ul>
+    <li>
+      Description: Clustering of candidate patches using a co-occurence approach
+    </li>
+    <li>
+      Period time: <b><span id='period_id'></span></b>
+    </li>
+    <li>
+      Results ordered by size of clusters
+    </li>
+    <li>
+      to change the experiment, change {exp_name} in the url i.e.g clustering_candidates.html?experiment={exp_name}
+    </li>
+  </ul>
+
+   <table id='clusters'>
+    
+    </table>
+
+  <script  type="text/template"  id='list_cluster_template'>
+      <tr><td width='100'> 
+            <b style='font-size:13px'>Cluster <%= cluster.id %></b>
+          </td><td>
+         <% 
+          //var i =1 and not 0 to remove the centroid
+         for (var i = 1; i< Math.min(300,cluster.members.length) ; i++) {
+            image = cluster.members[i];
+
+     		var style = "";
+         %><img src='../results/<%= exp %>/nn/images/<%= image.img_path[0] %>/cluster_<%= image.img_path[1] %>_patch_<%= image.img_path[2] %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= image.img_id %>'/><% } %></td> </tr>
+      
+    </script>
+</body>
+</html>

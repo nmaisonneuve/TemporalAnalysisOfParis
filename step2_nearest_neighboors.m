@@ -27,8 +27,12 @@ closest_detections = cell2mat(closest_detections);
 toc;
 
 
-% number of the top members for each candidate
-% Get only the top X nearest neighbors of each patch
-nb_top_detections = 20;
-[ranked_candidates_idx, purity,members_idx] = KNN_ranking_candidates(closest_detections,nb_top_detections,pos_idx);
+% k_nn = number of the nearest neighboors used for each candidate
+% to compute purity according to their label and rank candidates
+k_nn = 20;
+[ranked_candidates_idx, purity,members_idx] = KNN_ranking_candidates(closest_detections, k_nn ,pos_idx);
+
+% select only the top N candidates
+nb_top_detectors = 300;
+best_candidates_idx = ranked_candidates_idx(1:nb_top_detectors);
 

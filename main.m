@@ -17,6 +17,8 @@ end
 
 loaded_state = loaded_state_tmp2;
 
+% STEP 1 - generate pseudo-randomly some candidate
+% discriminative patches/detectors
 if (loaded_state < 1)
   step1_generate_candidates;
   
@@ -26,7 +28,7 @@ if (loaded_state < 1)
 end
 
 
-%%% STEP 2 - computing nearest neighbors
+%%% STEP 2 - computing their K-nearest neighbors for all the images
 if (loaded_state < 2)
   step2_nearest_neighboors;
   
@@ -36,3 +38,4 @@ if (loaded_state < 2)
 end
 
 % STEP 3 : to continue...
+

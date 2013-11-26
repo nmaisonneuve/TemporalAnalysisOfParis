@@ -22,9 +22,10 @@ function co_occurrence_matrix = cooccurrence_matrix(clusters_idx, members_idx, d
     patches_b = detections(members_idx(cluster_b_idx,:),:);
 
     % image co-occurrency:  present in the same images ?
-    nb_images = numel(intersect(patches_a(:,2), patches_b(:,2)));
-
-    clusters_co(i,3) =  nb_images;
+    % nb_images = numel(intersect(patches_a(:,2), patches_b(:,2)));
+    %clusters_co(i,3) =  nb_images;
+    
+    clusters_co(i,3) =  jaccard_coefficient(patches_a, patches_b);
   end
   toc;
 

@@ -12,12 +12,11 @@ function co_occurence = overlap_cooccurence(patches_a, patches_b)
     img_patches_a = patches_a(pa_idx,2:5);
     img_patches_b = patches_b(pb_idx,2:5);
     
-    
     % number of pairs
     inter_area = patch_intersection(img_patches_b,img_patches_a);
     nb_overlapping_patches = numel(nonzeros(inter_area));
     disp(inter_area);
-    co_occurence = co_occurence + nb_overlapping_patches
+    co_occurence = co_occurence + nb_overlapping_patches;
   end
  
 end

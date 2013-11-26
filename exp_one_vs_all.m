@@ -23,12 +23,10 @@ ds.params = struct(...,
   'sBins', 8, ...% HOG sBins parameter--i.e. the width in height (in pixels) of each cell
   'useColor', 1, ...% include a tiny image (the a,b components of the Lab representation) in the patch descriptor
   'useColorHists',0,...
-  'patchOnly', 0,...
   'patchOverlapThreshold', 0.5, ...%detections (and random samples during initialization) with an overlap higher than this are discarded.
   'overlap', 0.4, ...% detections with overlap higher than this are discarded.  
   'levelFactor', 2, ... % number of levels for pyramid HOG 
-  'sampleBig', 0,...
-  'knn_html_visualization',1); % do we generate KNN HTML visualisation?
+  'knn',20); % number of nearest neighboors used to compute purity
 
 
 
