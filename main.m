@@ -18,7 +18,7 @@ end
 loaded_state = loaded_state_tmp2;
 
 if (loaded_state < 1)
-  step1_generate_patches;
+  step1_generate_candidates;
   
   % save workspace
   save(data_step1_filename);

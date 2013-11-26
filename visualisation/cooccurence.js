@@ -6,7 +6,7 @@ visualize = function(clusters){
     cluster = clusters[i];
     //cluster.id = i + 1;
     console.log(cluster);
-    var d = _.template(template,{exp: experiment_name, sim: cluster});
+    var d = _.template(template,{exp: experiment_name, cluster: cluster});
     $("#clusters").append(d);
   }
 }
@@ -19,7 +19,7 @@ function getParameterByName(name) {
 }
 
 $(function() {
-  template = $("#cluster_template").html();
+  template = $("#list_cluster_template").html();
   experiment_name = getParameterByName('experiment');
    console.log(experiment_name);
   if (experiment_name == '')
@@ -27,7 +27,7 @@ $(function() {
   $("#experiment_id").html("experiment "+experiment_name);
 
   console.log(experiment_name);
-  $.getJSON("../results/"+experiment_name+"/cooccurence/cooccurrence.json", function(_clusters) {
+  $.getJSON("../results/"+experiment_name+"/cooccurence/clusters_cooccurence.json", function(_clusters) {
     clusters = _clusters;
     visualize(clusters);   
   });

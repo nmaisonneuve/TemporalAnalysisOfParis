@@ -28,6 +28,7 @@
     <ul>
     <li>for each pairwise of candidate patches, we compute their co-occurence frequency on their respective nearest neighboors at the image level(*). How many shared images do their nearest neighboors have in common. <br/> (*) more fine-grain co-occurency analysis e.g. overlapping patches on the same image will be done later</li>
     <li>to change experiment , add the 'experiment' parameter e.g. index.html?experiment=exp1</li>
+    <li>TODO sorted by node degree desc.</li>
 </ul>
     
     <div >
@@ -35,18 +36,22 @@
     </div>
 
     <!-- HTML template -->
-    <script  type="text/template"  id='cluster_template'>
-      <tr><td width='100'> 
-   
-          <span style='font-size:8px'>id <%= sim.patch_a[1] %> (from img <%= sim.patch_a[0] %>)</span>
-            <br/><img src='../results/<%= exp %>/cooccurence/images/<%= sim.patch_a[0] %>/cluster_<%= sim.patch_a[1] %>_patch_<%= sim.patch_a[2] %>.jpg' width='90' height='90'  />
-          </td>
-          <td width='100'> 
-   
-          <span style='font-size:8px'>id <%= sim.patch_b[1] %> (from img <%= sim.patch_b[0] %>)</span>
-            <br/><img src='../results/<%= exp %>/cooccurence/images/<%= sim.patch_b[0] %>/cluster_<%= sim.patch_b[1] %>_patch_<%= sim.patch_b[2] %>.jpg' width='90' height='90' />
-          </td>
-          <td><%= sim.co_occurence   %>/100</td>
+   <script  type="text/template"  id='list_cluster_template'>
+      <tr style='margin-top:5px'><td width='100'> 
+            <b style='font-size:13px'>Cluster <%= cluster.id %></b> 
+            
+  
+            <br/><img src='../results/<%= exp %>/nn/images/<%= cluster.centroid.img_path[0] %>/cluster_<%= cluster.centroid.img_path[1] %>_patch_<%= cluster.centroid.img_path[2] %>.jpg' width='90' height='90' /></td>
+       
+          <td>
+         <% 
+          //var i =1 and not 0 to remove the centroid
+         for (var i = 1; i< 30 ; i++) {
+            image = cluster.nn[i];
+            if (image.score < 0.2)
+              continue;
+
+         %><img src='../results/<%= exp %>/nn/images/<%= image.img_path[0] %>/cluster_<%= image.img_path[1] %>_patch_<%= image.img_path[2] %>.jpg' width='60' height='60' style='padding:1px' title='Cluster id: <%= image.id %> score:<%= image.score %>'/><% } %></td>
        
     </script>
   </body>

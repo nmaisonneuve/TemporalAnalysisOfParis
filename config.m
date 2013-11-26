@@ -13,6 +13,7 @@ addpath(fullfile('./libs/pf-segmentation/'));
 addpath(fullfile('./libs/'));
 addpath(fullfile('./libs/tools/'));
 addpath(fullfile('./libs/visualisation/'));
+addpath(fullfile('./libs/co-occurrence/'));
 
 % (optional) add unit tests directory to run some tests/debug
 addpath(fullfile('./test/'));

@@ -1,4 +1,7 @@
 var template;
+var level_template;
+var list_scale_template;
+
 var period_label = {"1": "< 1800",
 "2":"1801-1850",
 "3":"1851-1914",
@@ -11,18 +14,42 @@ var period_label = {"1": "< 1800",
 "11": "2000 >=",
 "0": "unknown"};
 
-visualize = function(clusters){
-  $("#clusters").empty();
+visualize_list_clusters = function(clusters){
   nb = Math.min(300, clusters.length);
+  html ="";
+  // 1 and not 0 , to remove the centroid
   for (var i  = 0 ; i < nb ; i++){
     cluster = clusters[i];
-    //cluster.id = i + 1;
-    console.log(cluster);
-    var d = _.template(template,{exp: experiment_name, cluster: cluster});
-    $("#clusters").append(d);
+    html += _.template(template,{exp: experiment_name, cluster: cluster});
+  }
+  return html;
+}
+
+
+// v1 +  grouped by patch scale level
+visualize_v2 = function(clusters){
+
+  groups = group_by_levels(clusters);
+
+  // we create the level menu
+  levels = _.keys(groups);
+  sorted_levels = _.sortBy(levels, function(level) {return -level;});
+  html_levels_menu = _.template(level_template,{levels: sorted_levels, groups: groups});
+  $("#scale_menu").html( html_levels_menu);
+
+  $("#clusters").empty();
+  for (var i  = 0 ; i < sorted_levels.length ; i++){
+    level = sorted_levels[i];
+    clusters_level = groups[level];
+    html = _.template(list_scale_template,{scale_idx: i, scale: level, clusters:clusters_level});
+    $("#clusters").append(html)
+
   }
 }
 
+function group_by_levels (clusters){
+ return _.groupBy(clusters, function(cluster){ return cluster.centroid.level });
+}
 
 
 function getParameterByName(name) {
@@ -33,7 +60,11 @@ function getParameterByName(name) {
 }
 
 $(function() {
-  template = $("#cluster_template").html();
+  // load templates
+  template = $("#list_cluster_template").html();
+  level_template = $("#levels_template").html();
+  list_scale_template = $("#list_clusters_scale_template").html();
+
   experiment_name = getParameterByName('experiment');
    console.log(experiment_name);
   if (experiment_name == '') {
@@ -53,6 +84,7 @@ $(function() {
   console.log(experiment_name);
   $.getJSON("../results/"+experiment_name+"/nn/clusters_knn.json", function(_clusters) {
     clusters = _clusters;
-    visualize(clusters);   
+    //visualize(clusters);   
+    visualize_v2 (clusters);
   });
 });

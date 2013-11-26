@@ -73,11 +73,19 @@ disp('dataset for experiment done. ');
 loaded_state = 1;
 main;
 
+%% POST PROCESSING
+experiment_dir = sprintf('results/%s',ds.params.experiment_name);
+
 visualisation_KNN;
-%if (ds.params.knn_html_visualization)
-%  
-%end
 
-%patch_cooccurence;
+% histogram according ot patch level of the top k clusters
+[height, width] = patch_size(patches(best_clusters_idx,2:5));
+fh = figure;
+hist(height);
+saveas(fh, [experiment_dir '/hist_patch_level'], 'jpg');
+close(fh)
 
-%%% POST PROCESSING
+co_matrix = cooccurrence_matrix(best_clusters_idx, top_nn_idx, closest_patches);
+
+co_clusters = clustering_cooccurrence(co_matrix);
+

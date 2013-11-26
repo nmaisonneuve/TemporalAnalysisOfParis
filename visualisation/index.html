@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Discovery of visual element discriminative of a given period of time</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="nm">
+<head>
+  <meta charset="utf-8">
+  <title>Discovery of visual element discriminative of a given period of time</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="nm">
 
-    <!-- Le styles -->
- 
+  <!-- Le styles -->
+
   <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="http://getbootstrap.com/examples/offcanvas/offcanvas.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="http://getbootstrap.com/examples/offcanvas/offcanvas.css" rel="stylesheet">
 
-
-    <script src="jquery.min.js"></script>
-    <script src="underscore-min.js"></script>
-    <script src="visualisation.js"></script>
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="assets/js/html5shiv.js"></script>
-      <![endif]-->
-    <style type="text/css">
+  <script src="jquery.min.js"></script>
+  <script src="underscore-min.js"></script>
+  <script src="visualisation.js"></script>
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+  <script src="assets/js/html5shiv.js"></script>
+  <![endif]-->
+  <style type="text/css">
       .color_3 {border: 2px solid #FF0080}
       .color_1 {border: 2px solid #D0F5A9}
       .color_0 {border: 2px solid #F78181}
@@ -31,47 +30,94 @@
 
        /* define margin as you see fit */
     </style>
-  </head>
-  <body>
-    <h1><div id='experiment_id'></div></h1>
-   
-    <ul>
- <li>Description: The top most discriminative clusters of visual elements coming from the facade of buildings in Paris</li>
-    <li>Label / discriminative attribute: <b>time period of building construction</b></li>
-    <li>Positive label / investigated time period: <b><span id='period_id' style='font-size:15px'></span> </b></li>
-      <li>Colored border of each visual element
-    <ul>
-    <li>Green =  visual element coming from a building of the investigated time period (positive label)</li>
-    <li>Red =  visual element coming from buildings of other time periods (negative label)</li>
-    </ul></li>
+</head>
+<body>
+  <h1>
+    <div id='experiment_id'></div>
+  </h1>
 
-    <li>Clusters ordered by purity score (purity ratio = nb of visual elements having a positive label / number of elements in the cluster). </li>
- 
-  <li>to change the experiment, change {exp_name} in the url i.e.g index.html?experiment={exp_name}</li>
-    
-    <div >
+  <ul>
+    <li>
+      Description: Top most discriminative clusters of visual elements coming from the facade of buildings in Paris for a given time period
+    </li>
+    <li>
+      Label / discriminative attribute: <b>time period of building construction</b>
+    </li>
+    <li>
+      Positive label / investigated time period: <b><span id='period_id' style='font-size:15px'></span></b> 
+    </li>
+    <li>
+      Colored border of each visual element
+      <ul>
+        <li>
+          Green =  visual element coming from a building of the investigated time period (positive label)
+        </li>
+        <li>
+          Red =  visual element coming from buildings of other time periods (negative label)
+        </li>
+      </ul>
+    </li>
+    <li>
+      Results ordered by:
+      <ul>
+        <li>
+          Scale level: it's a multi-scale discovery method, to differenciate patches fom different levels, the results are categorized according to the scale of the visual elements. larger visual elements first
+        </li>
+        <li>
+          Purity: then for each scale level category clusters are ordered by purity score (purity ratio = nb of visual elements having a positive label / number of elements in the cluster).
+        </li>
+      </ul>
+    </li>
+    <li>
+      to change the experiment, change {exp_name} in the url i.e.g index.html?experiment={exp_name}
+    </li>
+  </ul>
+  <div>
 
-      <table id='clusters'></table>
-    </div>
+    <div id='scale_menu'></div>
+  </div>
 
-    <!-- HTML template -->
-    <script  type="text/template"  id='cluster_template'>
+  <div id='clusters'></div>
+
+
+  <!-- HTML template -->
+  <script  type="text/template"  id='levels_template'>
+     <h3>Scales of visual elements </h3>
+     <p>(rought approximation of the real physical size of the discriminative visual elements)<ul>
+    <% for (var i = 0; i< levels.length ; i++) { %>
+   <li style='display: inline;'>
+    <a href='#clusters_scale_<%= i %>' class='btn btn-primary' style='width:120px'>scale <%= levels[i] %> (<%= (groups[levels[i]]).length %>)</a>
+   </li>
+   <% } %></ul></h3>
+ </script>
+
+  <script  type="text/template"  id='list_clusters_scale_template'>
+    <hr/>
+    <div id='clusters_scale_<%= scale_idx %>'>
+
+    <h3> Clusters with a centroid having a scale of <%= scale %> </h3>
+    <table>
+    <%= visualize_list_clusters(clusters) %>
+    </table>
+  </script>
+
+  <script  type="text/template"  id='list_cluster_template'>
       <tr><td width='100'> 
             <b style='font-size:13px'>Cluster <%= cluster.id %></b>
-            <br/> purity: <%= cluster.purity %>
-          </td>
+            <br/> purity: <%= cluster.purity %></td>
           <% if (cluster.centroid.img_path != undefined) { %>
           <td>
-            <br/> <span style='font-size:10px'> centroid </span>
-            <br/><img src='../results/<%= exp %>/nn/images/<%= cluster.centroid.img_path[0] %>/cluster_<%= cluster.centroid.img_path[1] %>_patch_<%= cluster.centroid.img_path[2] %>.jpg' width='90' height='90' />
-          </td>
+            <br/><span style='font-size:10px'>centroid-level <%= cluster.centroid.level %></span>
+            <br/><img src='../results/<%= exp %>/nn/images/<%= cluster.centroid.img_path[0] %>/cluster_<%= cluster.centroid.img_path[1] %>_patch_<%= cluster.centroid.img_path[2] %>.jpg' width='90' height='90' /></td>
           <% } %>
           <td>
-         <% for (var i = 0; i< 20 ; i++) {
+         <% 
+          //var i =1 and not 0 to remove the centroid
+         for (var i = 1; i< cluster.nn.length ; i++) {
             image = cluster.nn[i];
             style = "color_"+image.label;
          %><img src='../results/<%= exp %>/nn/images/<%= image.img_path[0] %>/cluster_<%= image.img_path[1] %>_patch_<%= image.img_path[2] %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= image.img_id %>'/><% } %></td>
        
     </script>
-  </body>
+</body>
 </html>
