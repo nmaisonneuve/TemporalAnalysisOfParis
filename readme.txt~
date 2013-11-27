@@ -21,8 +21,7 @@ not during the generation (removed according to grad/prob)
 but after the KNN process to keep the higher 
 ranked candidates between a pair of overlapping patches
 
-- overlapping when scales are different 
-(purity or scale as priority to keep one of the 2 patches?)
+- overlapping when scales are different (purity or scale as priority?)
 
 - purity (satisfactory criteria i.e. "pure enough")
 local  / not global discrimination criteria 

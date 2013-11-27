@@ -1,4 +1,6 @@
-  %%
+
+
+%%
   % formatting output data 
   %generate the clusters struct
   clusters = struct();
@@ -63,7 +65,7 @@ if (create)
   
   %save_img_patches([clusters.nn], imgs, img_dir);
 end
-
+end
 
 
 

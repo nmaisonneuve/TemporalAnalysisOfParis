@@ -7,9 +7,9 @@
 % overlap = [indice_patchA, indice_patchB, ratio of surface of patchA overlapping
 % patchB]
 % (NOTE: return only the overlapping pairs)
-function overlap = patch_intersection_list(patches)
+function overlap = patch_intersection_per_img(patches)
   
-  %prepare data 
+  %transform data to [x1 y1 width height]
   [width, height ] = patch_size(patches);
   A = [patches(:, [1 3]) width height];
   area = width.*height;

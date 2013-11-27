@@ -40,10 +40,10 @@
     </li>
 
     <li> <b>Description:</b>
-      Adjacency list representation of a co-occurrence graph:
+      Representation  of the adjacency list of a co-occurrence graph where:
       <ul>
-        <li>Nodes: the top K discriminative clusters / detectors found</li>
-        <li>Edge: a measure of co-occurence between 2 clusters</li>
+        <li>Node: the top K discriminative clusters / detectors found</li>
+        <li>Edge: a measure of co-occurence between 2 candidates patches(clusters)</li>
       </ul>
 
     </li>
@@ -83,7 +83,7 @@
   <!-- HTML template -->
   <script  type="text/template"  id='list_cluster_template'>
       <tr ><td width='100' style='padding-top:10px'> 
-            <b style='font-size:13px'>Cluster <%= cluster.id %> (centrality: 
+            <b style='font-size:13px'>Candidate <%= cluster.id %> (centrality: 
               <%= cluster.nn.length %>)</b> 
             <br/><img src='../results/<%= exp %>/nn/images/<%= cluster.centroid.img_path[0] %>/cluster_<%= cluster.centroid.img_path[1] %>_patch_<%= cluster.centroid.img_path[2] %>.jpg' width='90' height='90' /></td>
        
