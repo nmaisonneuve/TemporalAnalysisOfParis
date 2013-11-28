@@ -20,6 +20,7 @@ visualize_list_clusters = function(clusters){
   // 1 and not 0 , to remove the centroid
   for (var i  = 0 ; i < nb ; i++){
     cluster = clusters[i];
+    console.log(cluster);
     cluster.id = i+1;
      html = _.template(template,{exp: experiment_name, cluster: cluster});
     $("#clusters").append(html);

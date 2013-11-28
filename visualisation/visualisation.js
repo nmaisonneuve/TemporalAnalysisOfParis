@@ -20,6 +20,7 @@ visualize_list_clusters = function(clusters){
   // 1 and not 0 , to remove the centroid
   for (var i  = 0 ; i < nb ; i++){
     cluster = clusters[i];
+    console.log(cluster);
     html += _.template(template,{exp: experiment_name, cluster: cluster});
   }
   return html;
@@ -48,7 +49,7 @@ visualize_v2 = function(clusters){
 }
 
 function group_by_levels (clusters){
- return _.groupBy(clusters, function(cluster){ return cluster.centroid.level });
+ return _.groupBy(clusters, function(cluster){ return cluster.centroid.size });
 }
 
 
@@ -82,7 +83,7 @@ $(function() {
   $("#period_id").html(given_period);
 
   console.log(experiment_name);
-  $.getJSON("../results/"+experiment_name+"/nn/clusters_knn.json", function(_clusters) {
+  $.getJSON("../results/"+experiment_name+"/candidates.json", function(_clusters) {
     clusters = _clusters;
     //visualize(clusters);   
     visualize_v2 (clusters);

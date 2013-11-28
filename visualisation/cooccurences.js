@@ -1,9 +1,13 @@
 var template;
+var threshold = 0.2;
 
 visualize = function(clusters){
   $("#clusters").empty();
   // sort cluster by the number of members
- clusters = _.sortBy(clusters, function(cluster){ return -cluster.nn.length; });
+ clusters = _.sortBy(clusters, function(cluster){ 
+  return - _.filter(cluster.nn, function(member){ return member.score > threshold }).length;
+  //return -cluster.nn.length; 
+});
   for (var i  = 0 ; i < clusters.length ; i++){
     cluster = clusters[i];
     //cluster.id = i + 1;

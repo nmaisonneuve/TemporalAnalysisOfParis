@@ -86,7 +86,7 @@
      <p>(rought approximation of the real physical size of the discriminative visual elements)<ul>
     <% for (var i = 0; i< levels.length ; i++) { %>
    <li style='display: inline;'>
-    <a href='#clusters_scale_<%= i %>' class='btn btn-primary' style='width:120px'>scale <%= levels[i] %> (<%= (groups[levels[i]]).length %>)</a>
+    <a href='#clusters_scale_<%= i %>' class='btn btn-primary' style='width:120px'><%= levels[i] %>px (<%= (groups[levels[i]]).length %>)</a>
    </li>
    <% } %></ul></h3>
  </script>
@@ -95,7 +95,7 @@
     <hr/>
     <div id='clusters_scale_<%= scale_idx %>'>
 
-    <h3> Clusters with a centroid having a scale of <%= scale %> </h3>
+    <h3> Clusters with a centroid of a size of <%= scale %>px </h3>
     <table>
     <%= visualize_list_clusters(clusters) %>
     </table>
@@ -105,18 +105,21 @@
       <tr><td width='100'> 
             <b style='font-size:13px'>Cluster <%= cluster.id %></b>
             <br/> purity: <%= cluster.purity %></td>
-          <% if (cluster.centroid.img_path != undefined) { %>
+          <% if (cluster.centroid.img_path != undefined) {
+              img_path = cluster.centroid.img_path;
+           %>
           <td>
             <br/><span style='font-size:10px'>centroid-level <%= cluster.centroid.level %></span>
-            <br/><img src='../results/<%= exp %>/nn/images/<%= cluster.centroid.img_path[0] %>/cluster_<%= cluster.centroid.img_path[1] %>_patch_<%= cluster.centroid.img_path[2] %>.jpg' width='90' height='90' /></td>
+            <br/><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='90' height='90' /></td>
           <% } %>
           <td>
          <% 
           //var i =1 and not 0 to remove the centroid
          for (var i = 1; i< cluster.nn.length ; i++) {
             image = cluster.nn[i];
+            img_path = image.img_path;
             style = "color_"+image.label;
-         %><img src='../results/<%= exp %>/nn/images/<%= image.img_path[0] %>/cluster_<%= image.img_path[1] %>_patch_<%= image.img_path[2] %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= image.img_id %>'/><% } %></td>
+         %><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= img_path[0] %>'/><% } %></td>
        
     </script>
 </body>

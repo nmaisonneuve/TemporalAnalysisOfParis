@@ -62,10 +62,10 @@
          <% 
           //var i =1 and not 0 to remove the centroid
          for (var i = 1; i< Math.min(300,cluster.members.length) ; i++) {
-            image = cluster.members[i];
-
+            candidate = cluster.members[i];
+            img_path = candidate.img_path;
      		var style = "";
-         %><img src='../results/<%= exp %>/nn/images/<%= image.img_path[0] %>/cluster_<%= image.img_path[1] %>_patch_<%= image.img_path[2] %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= image.img_id %>'/><% } %></td> </tr>
+         %><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' class='<%= style %>' title='candidate :<%= candidate.id %>'/><% } %></td> </tr>
       
     </script>
 </body>

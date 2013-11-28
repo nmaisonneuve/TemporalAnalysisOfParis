@@ -82,10 +82,11 @@
 
   <!-- HTML template -->
   <script  type="text/template"  id='list_cluster_template'>
+  <% img_path = cluster.centroid.img_path; %>
       <tr ><td width='100' style='padding-top:10px'> 
             <b style='font-size:13px'>Candidate <%= cluster.id %> (centrality: 
               <%= cluster.nn.length %>)</b> 
-            <br/><img src='../results/<%= exp %>/nn/images/<%= cluster.centroid.img_path[0] %>/cluster_<%= cluster.centroid.img_path[1] %>_patch_<%= cluster.centroid.img_path[2] %>.jpg' width='90' height='90' /></td>
+            <br/><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='90' height='90' /></td>
        
           <td>
          <% 
@@ -93,10 +94,11 @@
           nb_displayed_members = Math.min(30, cluster.nn.length);
          for (var i = 1; i< nb_displayed_members ; i++) {
             image = cluster.nn[i];
-            //if (image.score < 0.2)
-            //  continue;
+            img_path = image.img_path;
+            if (image.score < threshold)
+              continue;
 
-         %><img src='../results/<%= exp %>/nn/images/<%= image.img_path[0] %>/cluster_<%= image.img_path[1] %>_patch_<%= image.img_path[2] %>.jpg' width='60' height='60' style='padding:1px' title='Cluster id: <%= image.id %> score:<%= image.score %>'/><% } %></td>
+         %><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' style='padding:1px' title='Cluster id: <%= image.id %> score:<%= image.score %>'/><% } %></td>
        
     </script>
 </body>

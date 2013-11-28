@@ -1,23 +1,19 @@
 % clusters_assignment structure = 
 % column [candidate_id , co_cluster_id]
 
-function save_cooccurrence_clustering(clusters_assignment, patches_info, json_file)
+function save_cooccurrence_clustering(clusters_idx, candidates, json_file)
   
-  nb_clusters = max(clusters_assignment(:,2));
-  
+nb_clusters = max(  clusters_idx);
+
 % transform data to json 
   clusters = struct();
-  for (i = 1:nb_clusters)
-    
+  for (i = 1:nb_clusters)    
+    members_idx = find(clusters_idx == i);
     members = struct();
-    members_idx = clusters_assignment(clusters_assignment(:,2)==i,1);
     for (j = 1:numel(members_idx))
-      idx = members_idx(j);
-      candidate_rank = find(clusters_assignment(:,1)==idx);
-      fprintf('\nCluster %d, candidate idx= %d, rank = %d',i,idx,candidate_rank);
-      img_id = patches_info(idx,1);  
-      members(j).img_id = img_id;
-      members(j).img_path = [img_id candidate_rank -1];
+      %fprintf('\nCluster %d, candidate idx= %d, rank = %d',i,idx,candidate_rank);
+      members(j).id = candidates(members_idx(j)).id;
+      members(j).img_path = candidates(members_idx(j)).centroid.img_path;
     end
     clusters(i).members = members;
   end
