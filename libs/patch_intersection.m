@@ -7,7 +7,7 @@
 % (NOTE: return only the overlapping pairs)
 
 function overlap = patch_intersection(patches)
-  tic;
+
   imgs = unique(patches(:,1))';
   overlap = [];
   for (img_id = imgs)
@@ -23,5 +23,5 @@ function overlap = patch_intersection(patches)
     overlap = [overlap; img_overlap];
     
   end
-  toc;
+
 end

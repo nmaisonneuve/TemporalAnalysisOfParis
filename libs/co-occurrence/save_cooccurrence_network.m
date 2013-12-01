@@ -26,6 +26,10 @@ for (i = 1:numel(candidates))
       nn(j).score = freq(j);
       nn(j).img_path = co_candidates(j).centroid.img_path;
       nn(j).size = co_candidates(j).centroid.size;
+      if (freq(j) == 12)
+        fprintf('candidate %d ',clusters(i).id);
+      end
+      
     end
   end
   clusters(i).nn = nn;

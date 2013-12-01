@@ -144,7 +144,7 @@ patInds = zeros(1, length(patches));
 indCount = 0;
 
 mask = zeros(patches(1).size.nrows, patches(1).size.ncols);
-[rows, columns] = size(mask);
+%[rows, columns] = size(mask);
 %fprintf('\nClean overlapping patches: row: %d x col: %d',rows, columns);
 
 nr = patches(1).x2 - patches(1).x1 + 1;
@@ -160,7 +160,7 @@ for i = 1 : numel(probInds)
   if subMaskArea / patchArea > thresh
     continue;
   end
-  mask(p.y1:p.y2, p.x1:p.x2) = 1;
+  mask(p.x1:p.x2, p.y1:p.y2) = 1;
   indCount = indCount + 1;
   patInds(indCount) = probInds(i);
 end
@@ -168,18 +168,6 @@ patInds = patInds(1:indCount);
 patInds = sort(patInds);
 end
 
-function [centers, vertExt] = getCategoryCenters(data, category)
-  objects = data.annotation.object;
-  objNames = {objects.name};
-  [ismem, unused] = ismember(objNames, {category});
-  primLoc = find(ismem);
-  centers = zeros(length(primLoc), 2);
-  vertExt = zeros(length(primLoc), 1);
-  for j = 1 : length(primLoc)
-    vertExt(j) = getVerticalExtent(objects(primLoc(j)));
-    [centers(j, 1), centers(j, 2)] = getCenter(objects(primLoc(j)), data);
-  end
-end
 
 function ext = getVerticalExtent(obj)
   [x,y] = getLMpolygon(obj.polygon);

@@ -34,3 +34,6 @@ patches = [image_patches.patches]';
 initFeats = bsxfun(@rdivide,bsxfun(@minus,initFeats,mean(initFeats,2)),...
     sqrt(var(initFeats,1,2)).*size(initFeats,2));
   
+% visualizing generated patches
+
+  

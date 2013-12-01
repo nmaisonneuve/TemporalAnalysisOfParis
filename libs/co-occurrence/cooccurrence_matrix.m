@@ -1,6 +1,10 @@
 
 % members_idx [ row = cluster_id , cols = patch id of the members ] 
-function co_occurrence_matrix = cooccurrence_matrix(candidates, detections)
+function co_occurrence_matrix = cooccurrence_matrix(candidates, detections, method)
+  
+  if nargin < 3
+    method =   'jaccard';
+  end
 
   %config();
   % create co-occurrence matrix
@@ -24,8 +28,19 @@ function co_occurrence_matrix = cooccurrence_matrix(candidates, detections)
     % image co-occurrency:  present in the same images ?
     % nb_images = numel(intersect(patches_a(:,2), patches_b(:,2)));
     %clusters_co(i,3) =  nb_images;
-    
-    clusters_co(i,3) =  jaccard_coefficient(patches_a, patches_b);
+    switch (method)
+      case 'jaccard'
+        clusters_co(i,3) =  jaccard_coefficient(patches_a, patches_b);
+        if (clusters_co(i,3) < 0.05)
+          clusters_co(i,3) = 0;
+        end
+      case 'overlap'
+        clusters_co(i,3) =  overlap_cooccurrence(patches_a(:,[2 4:7]), patches_b(:,[2 4:7]));
+        %fprintf('\n%d overlapping candidates',clusters_co(i,3));
+      case 'positive_overlap'
+      otherwise
+        fprintf('\nERROR method not recognized');
+    end  
   end
   toc;
 

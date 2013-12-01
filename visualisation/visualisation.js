@@ -81,6 +81,8 @@ $(function() {
 
   $("#experiment_id").html("Experiment : "+experiment_name);
   $("#period_id").html(given_period);
+  $("#cooccurrence_image_link").attr('href',"cooccurrences.html?experiment="+experiment_name+"&context=jaccard");
+  $("#cooccurrence_overlap_link").attr('href',"cooccurrences.html?experiment="+experiment_name+"&context=overlap");
 
   console.log(experiment_name);
   $.getJSON("../results/"+experiment_name+"/candidates.json", function(_clusters) {

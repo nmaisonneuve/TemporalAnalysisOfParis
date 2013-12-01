@@ -21,14 +21,22 @@
   <script src="assets/js/html5shiv.js"></script>
   <![endif]-->
   <style type="text/css">
-      .color_3 {border: 2px solid #FF0080}
-      .color_1 {border: 2px solid #D0F5A9}
-      .color_0 {border: 2px solid #F78181}
-      .color_3 {border: 2px solid #F7BE81}
-      .color_5 {border: 2px solid #FFFF00}
-     
-
+      .color_1 {border: 2px solid #FF0000}
+      .color_2 {border: 2px solid #DF7401}
+      .color_3 {border: 2px solid #D7DF01}
+      .color_5 {border: 2px solid #80FF00}
+      .color_6 {border: 2px solid #80FF00}
+      .color_7 {border: 2px solid #01DFA5}
+      .color_8 {border: 2px solid #01A9DB}
+      .color_9 {border: 2px solid #0431B4}
+      .color_10 {border: 2px solid #A901DB}
+      .color_11 {border: 2px solid #FE2E9A}
+      .space {margin:1px;}
+      .period_color_class {display:block;height:20px;width:50px;}
+      td.menu {padding-right:10px;padding-left:10px;margin-left:10px;text-align:center;}
        /* define margin as you see fit */
+      }
+      }
     </style>
 </head>
 <body>
@@ -37,25 +45,51 @@
   </h1>
 
   <ul>
+  <li></b> list of experiments
+   <table CELLSPACING="3" border='#f00'>
+<tr>
+<td class='menu' ><a style='font-size:16px;font-weight:bold;color:#000' href='?experiment=exp_one_vs_all_period1'>- 1800</a></td> 
+<td class='menu' ><a href='?experiment=exp_one_vs_all_period2'>1801-1850 </a></td>
+<td class='menu' ><a href='?experiment=exp_one_vs_all_period3'>1851-1914 </a></td>
+<td class='menu' ><a href='?experiment=exp_one_vs_all_period5'>1915-1939</a></td>
+<td class='menu' ><a href='?experiment=exp_one_vs_all_period6'>1940-1967</a></td>
+<td class='menu' ><a href='?experiment=exp_one_vs_all_period7'>1968-1975</a></td>
+<td class='menu' ><a href='?experiment=exp_one_vs_all_period8'>1976-1981</a></td>
+<td class='menu' ><a href='?experiment=exp_one_vs_all_period9'>1982-1989</a></td>
+<td class='menu' ><a href='?experiment=exp_one_vs_all_period10'>1990-1999</a></td>
+<td class='menu' ><a href='?experiment=exp_one_vs_all_period11'> 2000 + </a></td>
+</tr>
+<td><div class='period_color_class' style='background-color:#FF0000'></div></td>
+<td><div class='period_color_class' style='background-color: #DF7401'></div></td>
+<td><div class='period_color_class' style='background-color:#D7DF01'></div></td>
+<td><div class='period_color_class' style='background-color:#80FF00'></div></td>
+<td><div class='period_color_class' style='background-color:#00FF80'></div></td>
+<td><div class='period_color_class' style='background-color:#01DFA5'></div></td>
+<td><div class='period_color_class' style='background-color:#01A9DB'></div></td>
+<td><div class='period_color_class' style='background-color:#0431B4'></div></td>
+<td><div class='period_color_class' style='background-color:#A901DB'></div></td>
+<td><div class='period_color_class' style='background-color:#FE2E9A'></div></td>
+
+
+</tr>
+</table>
+  </li>
     <li>
       Description: Top 5% (300) most discriminative clusters of visual elements coming from the facade of buildings in Paris for a given time period
     </li>
+    <li> <b>Data:</b> images taken and cutted  (no ground floor) from GSV images  + cadastre data from Paris. </li>
     <li>
-      Label / discriminative attribute: <b>time period of building construction</b>
-    </li>
-    <li>
-      Positive label / investigated time period: <b><span id='period_id' style='font-size:15px'></span></b> 
-    </li>
-    <li>
-      Colored border of each visual element
-      <ul>
-        <li>
-          Green =  visual element coming from a building of the investigated time period (positive label)
-        </li>
-        <li>
-          Red =  visual element coming from buildings of other time periods (negative label)
-        </li>
+     Discriminative attribute: <ul>
+      <li><b>time period</b>: (purity score = nb of visual elements from building of a given time period / number of elements in the cluster).</li>
+      <li> Variaty </li>
       </ul>
+    </li>
+    <li>
+      Positive label / 
+    </li>
+    <li>
+      Colored border of each visual element = period time
+     
     </li>
     <li>
       Results ordered by:
@@ -64,15 +98,20 @@
           Scale level: it's a multi-scale discovery method, to differenciate patches fom different levels, the results are categorized according to the scale of the visual elements. larger visual elements first
         </li>
         <li>
-          Purity: then for each scale level category clusters are ordered by purity score (purity ratio = nb of visual elements having a positive label / number of elements in the cluster).
+          Purity
         </li>
       </ul>
     </li>
-    <li>
-      to change the experiment, change {exp_name} in the url i.e.g index.html?experiment={exp_name}
+    <li> <b>Co-occurence graph</b>
+      <ul>
+      <li><a href='#' id='cooccurrence_jaccard_link'>co-occurrence matrix visu. (context = shared image)</a></li>
+      <li>
+       <a href='#' id='cooccurrence_overlap_link'>co-occurrence matrix visu. (context = shared overlapping)</a></li>
+       </ul>
     </li>
   </ul>
-  <div>
+
+  <div  >
 
     <div id='scale_menu'></div>
   </div>
@@ -104,7 +143,7 @@
   <script  type="text/template"  id='list_cluster_template'>
       <tr><td width='100'> 
             <b style='font-size:13px'>Cluster <%= cluster.id %></b>
-            <br/> purity: <%= cluster.purity %></td>
+            <br/> score: <%= cluster.purity %></td>
           <% if (cluster.centroid.img_path != undefined) {
               img_path = cluster.centroid.img_path;
            %>
@@ -119,7 +158,7 @@
             image = cluster.nn[i];
             img_path = image.img_path;
             style = "color_"+image.label;
-         %><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' class='<%= style %>' title='from image:<%= img_path[0] %>'/><% } %></td>
+         %><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' class='space <%= style %>' title='from image:<%= img_path[0] %>'/><% } %></td>
        
     </script>
 </body>

@@ -1,2 +1,2 @@
 function filename=bg_file_name
-filename='./test/who/bg11.mat';
+filename='./data/bg11.mat';

@@ -4,7 +4,8 @@
 k_nn = 20;
 fprintf('\nRanking candidates...');
 tic;
-[ranked_candidates_idx, candidates] = KNN_ranking_candidates(detections, k_nn ,pos_idx);
+%[ranked_candidates_idx, candidates] = KNN_ranking_purity(detections, k_nn ,pos_idx);
+[ranked_candidates_idx, candidates] = KNN_ranking(detections, k_nn ,ds.imgs, positive_label);
 toc;
 
 %% REMOVE OVERLAPPING
@@ -15,7 +16,7 @@ tic;
 purity = [candidates.purity];
 to_keep_patches_idx = remove_overlapping_patches(patches, ds.params.patchOverlapThreshold, purity);
 toc;
-fprintf('\n %d/%d patches kept',numel(to_keep_patches_idx),size(patches,1));
+fprintf('\n %d/%d candidates patches kept',numel(to_keep_patches_idx),size(patches,1));
 
 
 % new ranking with overlapping element removed

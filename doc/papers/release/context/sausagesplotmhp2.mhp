@@ -1,0 +1,22 @@
+<html><body>
+<table><tr>
+<%for(i=1:numel(ds.myimg)) %>
+  <td><img src="<%~ds.myimg{i}%>" style="width:80px"/></td>
+<% end %>
+</tr>
+<%
+bx=argv.allgtboxes;
+[~,impos]=ismember(argv.alldata(:,[7 8 9]),[bx.imidx bx.flip bx.boxid]);
+for(i=1:numel(argv.tokeep))
+  %><tr><%
+  [~,detidx]=ismember([repmat(argv.tokeep(i),size(bx.imidx,1),1), bx.imidx, bx.flip, bx.boxid],argv.alldata(:,[6 7 8 9]),'rows');
+  for(j=1:size(bx.imidx,1))%>
+    <td style="<%if(detidx(j)>0&&isfield(argv,'detscore'))%>border:solid 2px #<%=colorforval(argv.detscore(detidx(j)))%><%else%>border-bottom:solid 1px #000<%end%>">
+      <% if(detidx(j)>0) %><img src="<%~ds.patchimg{detidx(j)}%>" 
+      title="<%=argv.alldata(detidx(j),5)%> <%if(isfield(argv,'detscore'))%><%=argv.detscore(detidx(j))%><%end%>" 
+      style="width:80px"/><% else %> &nbsp; <% end %>
+    </td>
+  <% end %>
+  </tr>
+<% end %>
+</body></html>

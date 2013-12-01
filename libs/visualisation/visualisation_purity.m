@@ -1,1 +1,0 @@
-cdfplot(purity); 

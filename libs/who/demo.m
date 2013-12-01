@@ -1,12 +1,11 @@
-clear;
 %add paths
 addpath(genpath(fullfile(pwd, 'code')));
 
 %compile features, if needed. Only needs to be done once.
-dirname=pwd;
-cd(fullfile(dirname, 'code', 'features'));
-compile;
-cd(dirname);
+%dirname=pwd;
+%cd(fullfile(dirname, 'code', 'features'));
+%compile;
+%cd(dirname);
 
 %% Training
 % We will train a model from a single instance.

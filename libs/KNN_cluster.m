@@ -1,5 +1,5 @@
 % function used to be a distributed work
-function [closest_patches_idx, dist, patches_position] = KNN_cluster(img_path, centroids, params)
+function [patches_position, dist] = KNN_cluster(img_path, centroids, params)
   
   [patches , features_patches, pyramid] = compute_valid_patches(img_path, params);
   

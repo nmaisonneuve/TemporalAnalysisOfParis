@@ -7,14 +7,14 @@ format shortG;
 
 addpath(fullfile('./libs/crossValClustering/'));
 addpath(fullfile('./libs/MinMaxSelection/'));
-addpath(fullfile('./libs/hog/'));
+%addpath(fullfile('./libs/hog/'));
 addpath(fullfile('./libs/jsonlab/'));
-addpath(fullfile('./libs/pf-segmentation/'));
+%addpath(fullfile('./libs/pf-segmentation/'));
 addpath(fullfile('./libs/'));
 addpath(fullfile('./libs/tools/'));
 addpath(fullfile('./libs/visualisation/'));
 addpath(fullfile('./libs/co-occurrence/'));
-
+addpath(genpath('./libs/who/'));
 % (optional) add unit tests directory to run some tests/debug
 addpath(fullfile('./test/'));
 

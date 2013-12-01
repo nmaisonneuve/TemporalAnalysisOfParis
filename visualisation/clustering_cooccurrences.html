@@ -61,7 +61,7 @@
           </td><td>
          <% 
           //var i =1 and not 0 to remove the centroid
-         for (var i = 1; i< Math.min(300,cluster.members.length) ; i++) {
+         for (var i = 0; i< Math.min(300,cluster.members.length) ; i++) {
             candidate = cluster.members[i];
             img_path = candidate.img_path;
      		var style = "";

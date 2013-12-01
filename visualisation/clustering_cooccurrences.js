@@ -20,7 +20,8 @@ visualize_list_clusters = function(clusters){
   // 1 and not 0 , to remove the centroid
   for (var i  = 0 ; i < nb ; i++){
     cluster = clusters[i];
-    console.log(cluster);
+    if (!(cluster.members instanceof Array))
+    cluster.members = [cluster.members];
     cluster.id = i+1;
      html = _.template(template,{exp: experiment_name, cluster: cluster});
     $("#clusters").append(html);
@@ -43,6 +44,11 @@ $(function() {
   template = $("#list_cluster_template").html();
 
   experiment_name = getParameterByName('experiment');
+  context = getParameterByName('context');
+  if (context == '') {
+    context = 'jaccard';
+  }
+
    console.log(experiment_name);
   if (experiment_name == '') {
     experiment_name = 'exp1';
@@ -58,7 +64,7 @@ $(function() {
 
   console.log(experiment_name);
 
-  $.getJSON("../results/"+experiment_name+"/cooccurrence/clustering.json", function(_clusters) {
+  $.getJSON("../results/"+experiment_name+"/cooccurrence/clustering_"+context+".json", function(_clusters) {
     clusters = _clusters;  
     visualize_list_clusters(clusters);
   });

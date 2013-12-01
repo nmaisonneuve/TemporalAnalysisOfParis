@@ -5,6 +5,7 @@ function model = learn(name,model,warped)
 % model can be left empty, in which case it is initialized and background statistics loaded.
 % Learn model by linear discriminant analysis
 if(isempty(model))
+  fprintf('\nWARNING empty model');
 	model=empty_model([3 3 3]);
 	load(bg_file_name);
 	model.bg=bg;

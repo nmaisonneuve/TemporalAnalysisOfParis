@@ -27,7 +27,11 @@ function w = reconstructSig(nx,ny,ww,dxy)
 % W = reconstructSig(nx,ny,ww,dxy)
 % W = n x n 
 % n = ny * nx * nf
-
+  disp(size(nx));
+  disp(size(ny));
+  disp(size(ww));
+  disp(size(dxy));
+  
   k  = size(dxy,1);
   nf = size(ww,1);
   n  = ny*nx;  

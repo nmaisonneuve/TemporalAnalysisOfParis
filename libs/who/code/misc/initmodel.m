@@ -50,7 +50,7 @@ model.w        = zeros(size);
 model.maxsize  = size(1:2);
 model.interval = 10;
 model.sbin     = sbin;
-model.thresh   = 0;
+model.thresh   = 0.7;
 model.bg       = bg;
 model.bg.lambda=0.01;
 model.bg;

@@ -19,10 +19,10 @@ function save_candidates_imgs(candidates, patches, detections, imgs, img_dir)
   end
 
   % create dir or clean it
-  if (exist(img_dir))
-    rmdir(img_dir,'s');
-  end 
-  mkdir(img_dir);
+  %if (exist(img_dir))
+  %  rmdir(img_dir,'s');
+  %end 
+  %mkdir(img_dir);
 
   % crop and save
   save_img_patches(patches_to_crops, imgs, img_dir);

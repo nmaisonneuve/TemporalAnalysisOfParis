@@ -1,0 +1,4 @@
+rollback on reduce phase should delete things created on map phase
+
+when everything is crashing, get variables written to savestate twice.  most likely crashes are not getting rolled back properly.
+

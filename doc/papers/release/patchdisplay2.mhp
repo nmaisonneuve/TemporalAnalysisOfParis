@@ -1,0 +1,57 @@
+<html>
+<head>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-32372780-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+<table>
+<% 
+if(~isfield(argv,'ovlweights'))
+  argv.ovlweights=zeros(size(argv.dets(:,[])));
+end
+[dets,posinpatchimg,ovlweights,detid]=distributeby(argv.dets,(1:size(argv.dets,1))',argv.ovlweights,argv.dets(:,6));
+if(isfield(argv,'detrord'))
+  [~,idxord]=ismember(argv.detrord,detid);
+else
+  idxord=1:numel(detid);
+  argv.detrord=detid;
+end
+if(~isfield(argv,'message'))
+  argv.message=repmat({''},numel(argv.detrord),1);
+end
+gbz=dsload('ds.conf.gbz{ds.conf.currimset}');
+imgs=dsload('.ds.imgs{ds.conf.currimset}');
+if(~isfield(gbz,'imgsurl'))
+  gbz.imgsurl='';
+end
+for(i=1:numel(idxord)) %>
+  <tr><td> <%=i%>: <br/></td>
+  <%if(idxord(i) ~= 0)
+    curdets=dets{idxord(i)};
+    curpos=posinpatchimg{idxord(i)};
+    curwt=ovlweights{idxord(i)};
+    [~,ord]=sort(curdets(:,5),'descend');
+    for(j=1:size(curdets,1)) %>
+      <td>
+        <a href="<%if(isfield(argv,'url'))%><%=argv.url{curpos(ord(j))}%><%else%><%=gbz.imgsurl%>/<%=imgs.fullname{curdets(ord(j),7)}%><%end%>">
+          <img src="patchimg[]/<%=curpos(ord(j))%>.jpg"/>
+        </a>
+      </td>
+    <%end
+  end%>
+  </tr>
+<%end%>
+      
+</table>
+</body></html>
