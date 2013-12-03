@@ -12,7 +12,7 @@ config();
 % set parameters for this experiment
 global ds;
 ds.params = struct(..., 
-  'experiment_name', 'exp_one_vs_all_period9',...%<-- NAME OF THE EXPERIMENT: IMPORTANT to differenciate experimental saved results
+  'experiment_name', 'exp_one_vs_all_period',...%<-- NAME OF THE EXPERIMENT: IMPORTANT to differenciate experimental saved results
   'pos_sample_size', 500, ... % sample size for positive images % usually 2000 positive images is enough; sometimes even 1000 works
   'neg_sample_size', 1500, ... % sample size for negative images % usually 2000 positive images is enough; sometimes even 1000 works   
   'seed_candidate_size', 250, ... %  ratio from the sample to get the number of images used to get seed patches candidates 
@@ -35,9 +35,11 @@ ds.params = struct(...,
 
 % load imgs data
 % define positive and negative labels
-positive_label = 9; 
+positive_label = 6;
+ds.params.experiment_name = [ds.params.experiment_name num2str(positive_label)];
+disp(ds.params);
 [ds.imgs, pos_idx] = prepare_data_one_vs_all(positive_label, ds.params);
-
+imgs = ds.imgs;
 
 %%% MAIN ALGO
 loaded_state = 0;
@@ -48,9 +50,9 @@ experiment_dir = sprintf('results/%s',ds.params.experiment_name);
 mkdir(experiment_dir);
 
 % histogram according ot patch level of the top k clusters
-[height, width] = patch_size(patches(best_clusters_idx,2:5));
-fh = figure;
-hist(height);
-saveas(fh, [experiment_dir '/hist_patch_level'], 'jpg');
-close(fh)
+%[height, width] = patch_size(patches(best_clusters_idx,2:5));
+%fh = figure;
+%hist(height);
+%saveas(fh, [experiment_dir '/hist_patch_level'], 'jpg');
+%close(fh)
 

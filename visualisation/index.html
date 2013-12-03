@@ -59,9 +59,10 @@
 <td class='menu' ><a href='?experiment=exp_one_vs_all_period10'>1990-1999</a></td>
 <td class='menu' ><a href='?experiment=exp_one_vs_all_period11'> 2000 + </a></td>
 </tr>
-<td><div class='period_color_class' style='background-color:#FF0000'></div></td>
-<td><div class='period_color_class' style='background-color: #DF7401'></div></td>
-<td><div class='period_color_class' style='background-color:#D7DF01'></div></td>
+</tr>
+<td></td>
+<td></td>
+<td></td>
 <td><div class='period_color_class' style='background-color:#80FF00'></div></td>
 <td><div class='period_color_class' style='background-color:#00FF80'></div></td>
 <td><div class='period_color_class' style='background-color:#01DFA5'></div></td>
@@ -69,44 +70,41 @@
 <td><div class='period_color_class' style='background-color:#0431B4'></div></td>
 <td><div class='period_color_class' style='background-color:#A901DB'></div></td>
 <td><div class='period_color_class' style='background-color:#FE2E9A'></div></td>
-
-
 </tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>large balcony <a href='#cluster_4310'>4310</a>,  <a href='#cluster_3475'> 3475</a>, very close each other <a href='#cluster_460'>460</a> , in glass/PVC <a href='#cluster_2124'>2124</a>, <a href='#cluster_1843'>1843 </a> or grille <a href='#cluster_1070'>1070</a>, <a href='#cluster_1646'>1646</a> 
+  , </td>
+<td></td>
+<td>typical elements of social buildings (<a href'http://en.wikipedia.org/wiki/HLM'>HLM</a>) e.g.  small simple square windows <a href='#cluster_2816'>2816</a> <a href='#cluster_923'>923</a> , <a href='#cluster_3444'>3444</a>,<a href='#cluster_5332'>5332</a> , <a href='#cluster_5297'>5297</a>, with typical wall <a href='#cluster_346'>346</a>, <a href='#cluster_2635'>2635</a>, <a href='#cluster_4058'>4058</a> </td>
+<td></td>
+<td></td>
+</tr>
+
 </table>
   </li>
     <li>
-      Description: Top 5% (300) most discriminative clusters of visual elements coming from the facade of buildings in Paris for a given time period
+      <b>Description </b> Top 5% most discriminative clusters of visual elements coming from the facade of buildings in Paris for a given time period.  Colored border of each visual element = period time. (multi-scale discovery method)
     </li>
-    <li> <b>Data:</b> images taken and cutted  (no ground floor) from GSV images  + cadastre data from Paris. </li>
+    <li> <b>Data:</b> Google Street view images (no ground floor) + cadastre data from Paris. </li>
     <li>
-     Discriminative attribute: <ul>
-      <li><b>time period</b>: (purity score = nb of visual elements from building of a given time period / number of elements in the cluster).</li>
-      <li> Variaty </li>
-      </ul>
+      <b>List sorted by  </b>:
+        <a id='sort_purity' class='btn btn-sm btn-primary' href='#'>only Purity</a> (purity score = positive elements / number of elements in the cluster)
+
+          <a id='sort_scale' class='btn btn-sm  btn-primary' href='#'>Scale level + purity</a>
+       
+        
+       
     </li>
-    <li>
-      Positive label / 
-    </li>
-    <li>
-      Colored border of each visual element = period time
-     
-    </li>
-    <li>
-      Results ordered by:
+    <li> <b>Associatin rules / co-occurence graph</b>: lots of candidates are similar or 'fire' on similar context. To cluster them we're testing several definitions of context to compute the co-occurences of their detections. 
       <ul>
-        <li>
-          Scale level: it's a multi-scale discovery method, to differenciate patches fom different levels, the results are categorized according to the scale of the visual elements. larger visual elements first
-        </li>
-        <li>
-          Purity
-        </li>
-      </ul>
-    </li>
-    <li> <b>Co-occurence graph</b>
-      <ul>
-      <li><a href='#' id='cooccurrence_jaccard_link'>co-occurrence matrix visu. (context = shared image)</a></li>
+      <li><a href='#' id='cooccurrence_jaccard_link'> context  = shared image</a></li>
       <li>
-       <a href='#' id='cooccurrence_overlap_link'>co-occurrence matrix visu. (context = shared overlapping)</a></li>
+       <a href='#' id='cooccurrence_overlap_link'>context = shared visuel space (overlap)</a></li>
        </ul>
     </li>
   </ul>
@@ -125,7 +123,7 @@
      <p>(rought approximation of the real physical size of the discriminative visual elements)<ul>
     <% for (var i = 0; i< levels.length ; i++) { %>
    <li style='display: inline;'>
-    <a href='#clusters_scale_<%= i %>' class='btn btn-primary' style='width:120px'><%= levels[i] %>px (<%= (groups[levels[i]]).length %>)</a>
+    <a href='#clusters_scale_<%= i %>'  style='width:120px'><%= levels[i] %>px (<%= (groups[levels[i]]).length %>)</a>
    </li>
    <% } %></ul></h3>
  </script>
@@ -141,7 +139,7 @@
   </script>
 
   <script  type="text/template"  id='list_cluster_template'>
-      <tr><td width='100'> 
+      <tr><td width='100' id='cluster_<%=cluster.id %>'> 
             <b style='font-size:13px'>Cluster <%= cluster.id %></b>
             <br/> score: <%= cluster.purity %></td>
           <% if (cluster.centroid.img_path != undefined) {

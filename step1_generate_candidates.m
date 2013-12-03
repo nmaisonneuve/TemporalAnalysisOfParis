@@ -2,7 +2,8 @@
 % to get seed patch candidates
 seed_pos_idx = randsample(pos_idx, ds.params.seed_candidate_size);
 fprintf('\nComputing candidate patches from %d positive images', numel(seed_pos_idx));
-    
+
+
 % number of initial clusters
 nb_init_clusters = numel(seed_pos_idx) * ds.params.seed_patches_per_image;
 
@@ -14,7 +15,7 @@ tic;
 image_patches = struct(); 
 parfor i = 1: numel(seed_pos_idx)  
   img_idx = seed_pos_idx(i);
-
+disp(img_idx);
   [patches, feats, ~] = sampleRandomPatches(img_idx, ds, ds.params.seed_patches_per_image);
   fprintf('\n%d patches extracted from image %d (idx: %d)',size(patches,1), i, img_idx);
   img_id_col = ones(size(patches,1),1) * img_idx;

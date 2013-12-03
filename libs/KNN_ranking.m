@@ -2,6 +2,8 @@ function [ranked_candidates_idx, candidates] = KNN_ranking(detections, top_k_nei
   dist_column_id = 3;
   candidate_column_id = 1;
   image_column_id = 2;
+  period_labels = [1 2 3 5 6 7 8 9 10 11];
+  positive_idx = find(period_labels == positive_label);
   
   % candidates ids
   candidates_ids = unique(detections(:,1));
@@ -24,22 +26,28 @@ function [ranked_candidates_idx, candidates] = KNN_ranking(detections, top_k_nei
       candidates(i).id = candidates_ids(i);
       candidates(i).nn_detections_idx = NN_patches_idx(ord);
       candidates(i).labels = [imgs(detections(candidates(i).nn_detections_idx,image_column_id)).label];        
-      candidates(i).purity = compute_purity( candidates(i).labels, positive_label);
+      
+      %candidates(i).purity = compute_purity( candidates(i).labels);
+      candidates(i).purity = compute_entropy( candidates(i).labels);
   end
   toc;
   
    %rank candidates clusters by entropy (higher = more diverse)
   [~, ranked_candidates_idx] = sort([candidates.purity]',1, 'descend');
   
-  function score = compute_purity(labels, positive_label)
+  function score = compute_purity(labels)
     score = sum(labels==positive_label)/numel(labels);
   end
   
   function score = compute_entropy(labels)
-      period_labels = [1 2 3 5 6 7 8 9 10 11]
-      [p, ~ ] = hist(labels,period_labels);
+    [p, ~ ] = hist(labels,period_labels);
+    [~, mode_idx] = max(p); % if mode  == positive label
+    if (mode_idx == positive_idx)
       p = p/sum(p) + 0.0001; % to prevent log(0)
-      score = -sum(p.*log2(p));
+      score = sum(p.*log2(p));  % reverse of entropy
+    else
+      score = -Inf;
+    end
   end
 
 end

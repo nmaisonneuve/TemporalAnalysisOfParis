@@ -26,7 +26,11 @@ visualize_list_clusters = function(clusters){
   return html;
 }
 
-
+visualize_v1 = function(clusters){
+  $("#clusters").empty();
+  html = visualize_list_clusters(clusters);
+  $("#clusters").append(html);
+}
 // v1 +  grouped by patch scale level
 visualize_v2 = function(clusters){
 
@@ -43,7 +47,7 @@ visualize_v2 = function(clusters){
     level = sorted_levels[i];
     clusters_level = groups[level];
     html = _.template(list_scale_template,{scale_idx: i, scale: level, clusters:clusters_level});
-    $("#clusters").append(html)
+    $("#clusters").append(html);
 
   }
 }
@@ -79,6 +83,14 @@ $(function() {
     given_period ='unknown';
   }
 
+  $("#sort_scale").click(function(event){
+    visualize_v2 (clusters);
+  });
+
+  $("#sort_purity").click(function(event){
+    visualize_v1 (clusters);
+  });
+
   $("#experiment_id").html("Experiment : "+experiment_name);
   $("#period_id").html(given_period);
   $("#cooccurrence_image_link").attr('href',"cooccurrences.html?experiment="+experiment_name+"&context=jaccard");
@@ -87,7 +99,7 @@ $(function() {
   console.log(experiment_name);
   $.getJSON("../results/"+experiment_name+"/candidates.json", function(_clusters) {
     clusters = _clusters;
-    //visualize(clusters);   
-    visualize_v2 (clusters);
+    visualize_v2 (clusters);   
+    
   });
 });

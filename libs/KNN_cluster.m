@@ -5,18 +5,19 @@ function [patches_position, dist] = KNN_cluster(img_path, centroids, params)
   
   if(isempty(patches))
     disp('ALERT NO patch FOUND ');
-    return;
-  end
+    patches_position = [];
+    dist = [];
+  else
+    % for each candidate what is the closest patche
+    % (and not for each patch what is the closest candidate)
+    % [closest_patches_idx, dist]=assigntoclosest(single(centroids),single(features_patches));
+  
+    [closest_patches_idx, dist]=assigntoclosest(centroids,features_patches);
 
-  % for each candidate what is the closest patche
-  % (and not for each patch what is the closest candidate)
- % [closest_patches_idx, dist]=assigntoclosest(single(centroids),single(features_patches));
-  
-  [closest_patches_idx, dist]=assigntoclosest(centroids,features_patches);
-  
-  % return patch info only from the closest patches
-  patches = patches(closest_patches_idx,:);
-  features_patches(closest_patches_idx,:);
-  
-  patches_position = patch_level_to_position(patches, pyramid, params);
+    % return patch info only from the closest patches
+    patches = patches(closest_patches_idx,:);
+    features_patches(closest_patches_idx,:);
+
+    patches_position = patch_level_to_position(patches, pyramid, params);
+  end
 end

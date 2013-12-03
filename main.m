@@ -19,7 +19,6 @@ if (loaded_state < 1)
   
   % save workspace
   clearvars image_patches;
-  clearvars loaded_state;
   save(data_step1_filename);
   disp('saved workspace at step 1');
 end
@@ -27,7 +26,7 @@ end
 
 %%% STEP 2 - computing their K-nearest neighbors for all the images
 if (loaded_state < 2)
-   detections = step2_knn_detections(initFeats,ds.imgs,ds.params);
+   detections = step2_knn_detections(initFeats,imgs,ds.params);
  
   % save workspace
   clearvars loaded_state;
