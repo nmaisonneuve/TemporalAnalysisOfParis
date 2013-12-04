@@ -92,7 +92,10 @@ $(function() {
   });
 
   $("#experiment_id").html("Experiment : "+experiment_name);
-  $("#period_id").html(given_period);
+  $("#period_"+matching[1]).addClass('current_period');
+  
+  console.log("#period_"+matching[1]);
+
   $("#cooccurrence_image_link").attr('href',"cooccurrences.html?experiment="+experiment_name+"&context=jaccard");
   $("#cooccurrence_overlap_link").attr('href',"cooccurrences.html?experiment="+experiment_name+"&context=overlap");
 

@@ -6,7 +6,7 @@ addpath(genpath('./libs/co-occurrence/'));
 root_dir = sprintf('results/%s/cooccurrence',ds.params.experiment_name);
 mkdir(root_dir);
 
-method = 'jaccard';
+
 %% Compute co-occurrence matrix
 co_matrix = cooccurrence_matrix(candidates(1:nb_top_detectors), detections, method);
 % remove weak ties

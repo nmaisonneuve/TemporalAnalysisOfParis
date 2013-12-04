@@ -34,12 +34,14 @@
 
 
     <li> <b>Description:</b>
-      Representation  of the adjacency list of a co-occurrence graph where:
+      Basic visualisation/Representation  of the adjacency list of a co-occurrence graph where:
       <ul>
         <li>Node: the top K discriminative clusters / detectors found</li>
         <li>Edge: a measure of co-occurence between 2 candidates patches(clusters)</li>
       </ul>
-
+      for each cluster, we only display the top most 30 co-occurrent clusters
+Ranking: Node/Clusters sorted by degree network centrality
+          
     </li>
     <li> <b>Co-occurrence measure /shared context:   :</b>
 
@@ -58,22 +60,8 @@
         </li>
       </ul>
     </li>
-    <li>
-      <b>Visualisation</b>
-      <ul>
-        <li>Ranking: Node/Clusters sorted by degree centrality</li>
-        <li>
-          for each cluster, we only display the top most 30 co-occurrent clusters
-        </li>
-      </ul>
-    </li>
-        <li>
-      Other experiments:
-      <a href='?experiment=exp_one_vs_all_period1&context=jaccard'>period 1</a>
-      <a href='?experiment=exp_one_vs_all_period3&context=jaccard'>period 3</a>
-      <a href='?experiment=exp_one_vs_all_period5&context=jaccard'>period 5</a>
-      <a href='?experiment=exp_one_vs_all_period7&context=jaccard'>period 7</a>
-    </li>
+    
+    
     <li>(be carefull json data file > 5Mo)</li>
   </ul>
 

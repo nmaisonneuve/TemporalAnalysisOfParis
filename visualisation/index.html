@@ -31,6 +31,7 @@
       .color_9 {border: 2px solid #0431B4}
       .color_10 {border: 2px solid #A901DB}
       .color_11 {border: 2px solid #FE2E9A}
+      .current_period{font-size:16px;font-weight:bold;color:#000}
       .space {margin:1px;}
       .period_color_class {display:block;height:20px;width:50px;}
       td.menu {padding-right:10px;padding-left:10px;margin-left:10px;text-align:center;}
@@ -48,16 +49,16 @@
   <li></b> list of experiments
    <table CELLSPACING="3" border='#f00'>
 <tr>
-<td class='menu' ><a style='font-size:16px;font-weight:bold;color:#000' href='?experiment=exp_one_vs_all_period1'>- 1800</a></td> 
-<td class='menu' ><a href='?experiment=exp_one_vs_all_period2'>1801-1850 </a></td>
-<td class='menu' ><a href='?experiment=exp_one_vs_all_period3'>1851-1914 </a></td>
-<td class='menu' ><a href='?experiment=exp_one_vs_all_period5'>1915-1939</a></td>
-<td class='menu' ><a href='?experiment=exp_one_vs_all_period6'>1940-1967</a></td>
-<td class='menu' ><a href='?experiment=exp_one_vs_all_period7'>1968-1975</a></td>
-<td class='menu' ><a href='?experiment=exp_one_vs_all_period8'>1976-1981</a></td>
-<td class='menu' ><a href='?experiment=exp_one_vs_all_period9'>1982-1989</a></td>
-<td class='menu' ><a href='?experiment=exp_one_vs_all_period10'>1990-1999</a></td>
-<td class='menu' ><a href='?experiment=exp_one_vs_all_period11'> 2000 + </a></td>
+<td class='menu' ><a id='period_1' href='?experiment=exp_one_vs_all_period1'>- 1800</a></td> 
+<td class='menu' ><a id='period_2' href='?experiment=exp_one_vs_all_period2'>1801-1850 </a></td>
+<td class='menu' ><a id='period_3' href='?experiment=exp_one_vs_all_period3'>1851-1914 </a></td>
+<td class='menu' ><a id='period_5' href='?experiment=exp_one_vs_all_period5'>1915-1939</a></td>
+<td class='menu' ><a id='period_6' href='?experiment=exp_one_vs_all_period6'>1940-1967</a></td>
+<td class='menu' ><a id='period_7' href='?experiment=exp_one_vs_all_period7'>1968-1975</a></td>
+<td class='menu' ><a id='period_8' href='?experiment=exp_one_vs_all_period8'>1976-1981</a></td>
+<td class='menu' ><a id='period_9' href='?experiment=exp_one_vs_all_period9'>1982-1989</a></td>
+<td class='menu' ><a id='period_10' href='?experiment=exp_one_vs_all_period10'>1990-1999</a></td>
+<td class='menu' ><a id='period_11' href='?experiment=exp_one_vs_all_period11'> 2000 + </a></td>
 </tr>
 </tr>
 <td></td>
@@ -102,7 +103,7 @@
     </li>
     <li> <b>Associatin rules / co-occurence graph</b>: lots of candidates are similar or 'fire' on similar context. To cluster them we're testing several definitions of context to compute the co-occurences of their detections. 
       <ul>
-      <li><a href='#' id='cooccurrence_jaccard_link'> context  = shared image</a></li>
+      <li><a href='#' id='cooccurrence_image_link'> context  = shared image</a></li>
       <li>
        <a href='#' id='cooccurrence_overlap_link'>context = shared visuel space (overlap)</a></li>
        </ul>
