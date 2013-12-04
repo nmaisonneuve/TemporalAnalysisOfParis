@@ -29,8 +29,6 @@ ds.params = struct(...,
   'levelFactor', 2, ... % number of levels for pyramid HOG 
   'knn',20); % number of nearest neighboors used to compute purity
 
-
-
 %%%%% SETUP DATA FOR THIS EXPERIMENT
 
 % load imgs data
