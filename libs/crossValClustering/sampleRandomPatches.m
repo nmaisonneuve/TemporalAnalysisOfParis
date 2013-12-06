@@ -1,20 +1,17 @@
 %Edit: Carl Doersch (cdoersch at cs dot cmu dot edu) to use dswork.
-function [patches, patFeats, probabilities] = sampleRandomPatches(pos,ds, samplelimit)
+function [patches, patFeats, probabilities] = sampleRandomPatches(pos,imgs, params)
 
 % Samples random patches. 
 % Sampling is biased to reduce selection of blank patches.
 %
 % Author: saurabh.me@gmail.com (Saurabh Singh).
 
-
-if nargin < 3
-  samplelimit =   -1;
-end
+samplelimit = params.seed_patches_per_image;
   
 %global ds;
 
-levelFactor = ds.params.levelFactor;
-img_path = ds.imgs(pos).path;
+levelFactor = params.levelFactor;
+img_path = imgs(pos).path;
 
 %data = pos;
 %pos = pos.annotation;
@@ -22,16 +19,16 @@ img_path = ds.imgs(pos).path;
 
 I = im2double(imread(img_path));%imread([ds.conf.gbz{ds.conf.currimset}.cutoutdir ds.imgs(pos).fullpath]));
 
-pyramid = constructFeaturePyramidForImg(I, ds.params);
+pyramid = constructFeaturePyramidForImg(I, params);
 
-[features, levels, indexes] = unentanglePyramid(pyramid, ds.params);
+[features, levels, indexes] = unentanglePyramid(pyramid, params);
 
 % converting into a size regular size?
-if(ds.params.imageCanonicalSize ==-1)
+if(params.imageCanonicalSize ==-1)
   IS=I;
   scale=1;
 else
-[IS, scale] = convertToCanonicalSize(I, ds.params.imageCanonicalSize);
+[IS, scale] = convertToCanonicalSize(I, params.imageCanonicalSize);
 end
  
 [rows, cols, ~] = size(IS);
@@ -45,13 +42,13 @@ IG = getGradientImage(IS);
 
 
 % select only a subset of levels / scales
-selLevels = 1 : ds.params.scaleIntervals/2 : length(pyramid.scales);
+selLevels = 1 : params.scaleIntervals/2 : length(pyramid.scales);
 levelScales = pyramid.scales(selLevels);
 numLevels = length(selLevels);
 
 
   
-[prSize, pcSize, ~] = getCanonicalPatchHOGSize(ds.params);
+[prSize, pcSize, ~] = getCanonicalPatchHOGSize(params);
 
 patches = [];
 patFeats = [];
@@ -62,9 +59,9 @@ basenperlev=(basenperlev(1)-prSize+1)*(basenperlev(2)-pcSize+1);
 
 for i = 1 : numLevels
   % size of the patch at this level
-  levPatSize = floor(ds.params.patchCanonicalSize .* levelScales(i));
+  levPatSize = floor(params.patchCanonicalSize .* levelScales(i));
   
-  if(ds.params.sampleBig)
+  if(params.sampleBig)
     numLevPat=floor(basenperlev/levelFactor);
   else
     numLevPat = floor((rows / (levPatSize(1) / levelFactor)) * ...
@@ -84,8 +81,8 @@ for i = 1 : numLevels
   randNums = getRandForPdf(pDist1d, numLevPat);
   probs = pDist1d(randNums);
   [IY, IX] = ind2sub(size(IGS), randNums);
-  IY = ceil(IY ./ (levelScales(i) * ds.params.sBins));
-  IX = ceil(IX ./ (levelScales(i) * ds.params.sBins));
+  IY = ceil(IY ./ (levelScales(i) * params.sBins));
+  IX = ceil(IX ./ (levelScales(i) * params.sBins));
   
   [nrows, ncols, ~] = size(pyramid.features{selLevels(i)});
   IY = IY - floor(prSize / 2);
@@ -102,7 +99,7 @@ for i = 1 : numLevels
   
   % create metadata of all the patches
   metadata = getMetadataForPositives(selectedPatInds, levels,...
-    indexes, prSize, pcSize, pyramid, pos, ds.imgs(pos));
+    indexes, prSize, pcSize, pyramid, pos, imgs(pos));
 
   
   feats = features(selectedPatInds, :);
@@ -112,7 +109,7 @@ for i = 1 : numLevels
     
     % remove overlapping patches (a patch overlapping a previous one is removed)
     patInds = cleanUpOverlappingPatches(metadata, ...
-      ds.params.patchOverlapThreshold, probs);
+      params.patchOverlapThreshold, probs);
    % fprintf('\nafter clean overlapping %d on %d initial patches',numel(patInds), numel(metadata));
     
     % Tree oclusion: remove patch with too much green inside

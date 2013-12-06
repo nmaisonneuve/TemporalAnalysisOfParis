@@ -1,7 +1,7 @@
 var template;
 var level_template;
 var list_scale_template;
-
+var filter;
 var period_label = {"1": "< 1800",
 "2":"1801-1850",
 "3":"1851-1914",
@@ -33,6 +33,7 @@ visualize_v1 = function(clusters){
 }
 // v1 +  grouped by patch scale level
 visualize_v2 = function(clusters){
+
 
   groups = group_by_levels(clusters);
 
@@ -71,10 +72,20 @@ $(function() {
   list_scale_template = $("#list_clusters_scale_template").html();
 
   experiment_name = getParameterByName('experiment');
-   console.log(experiment_name);
+  console.log(experiment_name);
   if (experiment_name == '') {
     experiment_name = 'exp1';
   }
+
+  filter = getParameterByName('filter');
+  if (filter != '') {
+    filter = filter.split(',');
+    filter = _.map(filter,function(id) {return parseInt(id)});
+  }else{
+   filter = []; 
+  }
+  
+
   matching = experiment_name.match(/exp_one_vs_all_period(\d+)/);
   console.log(matching);
   if (matching != null)
@@ -102,7 +113,11 @@ $(function() {
   console.log(experiment_name);
   $.getJSON("../results/"+experiment_name+"/candidates.json", function(_clusters) {
     clusters = _clusters;
-    visualize_v2 (clusters);   
-    
+    if (filter.length > 0){
+      clusters = _.filter(clusters, function(cluster){
+       return filter.indexOf(cluster.id)>-1; 
+      });
+    }
+    visualize_v2 (clusters);       
   });
 });

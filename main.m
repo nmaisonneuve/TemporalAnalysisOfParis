@@ -29,15 +29,28 @@ if (loaded_state < 2)
    detections = step2_knn_detections(initFeats,imgs,ds.params);
  
   % save workspace
+  tmp = loaded_state;
   clearvars loaded_state;
   save(data_step2_filename);
+  loaded_state = tmp;
   disp('saved workspace at step 2');
 end
 
-% STEP 3 : to continue...
-
-step3_ranking;
-
 visualisation;
+
+% STEP 3 : to continue...
+%%% STEP 2 - computing their K-nearest neighbors for all the images
+data_step3_filename = sprintf('data/step3_%s.mat',ds.params.experiment_name);
+if (loaded_state  < 3)
+   step3_ranking;
+ 
+  % save workspace
+  clearvars loaded_state;
+  save(data_step3_filename);
+  disp('saved workspace at step 3');
+end
+
+
+
 %cooccurrence;
 

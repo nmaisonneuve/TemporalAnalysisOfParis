@@ -7,6 +7,7 @@ format shortG;
 
 addpath(fullfile('./libs/crossValClustering/'));
 addpath(fullfile('./libs/MinMaxSelection/'));
+addpath(fullfile('./libs/jsonlab/'));
 %addpath(fullfile('./libs/hog/'));
 addpath(fullfile('./libs/jsonlab/'));
 %addpath(fullfile('./libs/pf-segmentation/'));

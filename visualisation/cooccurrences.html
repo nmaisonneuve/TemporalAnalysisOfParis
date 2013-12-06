@@ -87,7 +87,7 @@ Ranking: Node/Clusters sorted by degree network centrality
             if (image.score < threshold)
               continue;
 
-         %><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' style='padding:1px' title='Cluster id: <%= image.id %> score:<%= image.score %>'/><% } %></td>
+         %><a href='#'><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' style='padding:1px' title='Candidate id: <%= image.id %> score:<%= image.score %>'/><% } %></a></td>
        
     </script>
 </body>

@@ -8,7 +8,7 @@
 root_dir = sprintf('results/%s',ds.params.experiment_name);
 mkdir(root_dir);
 % get the top 5% most discriminative patches 
-nb_top_detectors = uint8(0.05 * size(patches,1));
+nb_top_detectors = uint16(0.05 * size(patches,1));
 
 % save to candidates + members as json file
 fprintf('\nSaving patches metada to json...');
@@ -16,7 +16,7 @@ tic;
 json_file = [root_dir '/candidates.json'];
 %save_candidates_to_json(candidates, ... 
 %  detections, pos_idx,json_file);
-formated_candidates = save_candidates_to_json(candidates(1:nb_top_detectors), patches, detections, json_file);
+formated_top_candidates = save_candidates_to_json(candidates(1:nb_top_detectors), patches, detections, json_file);
 toc;
 
 fprintf('\nCroping patches from images...');

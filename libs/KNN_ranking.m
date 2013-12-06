@@ -26,8 +26,7 @@ function [ranked_candidates_idx, candidates] = KNN_ranking(detections, top_k_nei
       candidates(i).id = candidates_ids(i);
       candidates(i).nn_detections_idx = NN_patches_idx(ord);
       candidates(i).labels = [imgs(detections(candidates(i).nn_detections_idx,image_column_id)).label];        
-      
-      candidates(i).purity = compute_purity( candidates(i).labels);
+      candidates(i).purity = compute_purity( candidates(i).labels);      
       %candidates(i).purity = compute_entropy( candidates(i).labels);
   end
   toc;
