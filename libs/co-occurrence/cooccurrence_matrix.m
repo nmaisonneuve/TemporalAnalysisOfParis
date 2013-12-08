@@ -39,7 +39,6 @@ function co_occurrence_matrix = cooccurrence_matrix(candidates, detections, para
         overlaps = overlap_cooccurrence(patches_a(:,[2 4:7]), patches_b(:,[2 4:7]), params.overlap_threshold);
         clusters_co(i,3) =  size(overlaps,1);
         %fprintf('\n%d overlapping candidates',clusters_co(i,3));
-      case 'positive_overlap'
       otherwise
         fprintf('\nERROR method not recognized');
     end  

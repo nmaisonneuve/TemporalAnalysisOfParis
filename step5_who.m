@@ -1,7 +1,7 @@
 
 
 tic;
-models = learn_patches(patches(1597,:),ds.imgs);
+models = learn_patches(patches(candidates(1).id,:),imgs);
 toc;
 
 

@@ -22,5 +22,5 @@ toc;
 fprintf('\nCroping patches from images...');
 tic;
 img_dir = [root_dir '/images'];
-save_candidates_imgs(candidates(1:nb_top_detectors), patches, detections, imgs, img_dir)
+save_candidates_imgs(candidates(1:nb_top_detectors), patches, detections, ds.imgs, img_dir)
 toc;

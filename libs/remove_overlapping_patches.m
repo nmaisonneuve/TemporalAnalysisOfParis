@@ -6,7 +6,7 @@ function to_keep_patches_idx = remove_overlapping_patches(patches, threshold, pr
   %nb_init = size(patches,1);
 
   % computer overlapping
-  intersection = patch_intersection(patches);
+  intersection = filter_overlapping_patches(patches);
 
   % we keep only patches overlapping less than a threshold
   over = find((intersection(:,3) < threshold));

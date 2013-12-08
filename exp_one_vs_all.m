@@ -33,7 +33,7 @@ ds.params = struct(...,
 
 % load imgs data
 % define positive and negative labels
-positive_label = 11;
+positive_label = 1;
 ds.params.experiment_name = [ds.params.experiment_name num2str(positive_label)];
 disp(ds.params);
 [imgs, pos_idx] = prepare_data_one_vs_all(positive_label, ds.params);
@@ -43,7 +43,7 @@ disp(ds.params);
 experiment_dir = sprintf('results/%s',ds.params.experiment_name);
 mkdir(experiment_dir);
 
-loaded_state = 0;
+loaded_state = 2;
 main;
 
 %% POST PROCESSING

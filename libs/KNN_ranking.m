@@ -48,5 +48,4 @@ function [ranked_candidates_idx, candidates] = KNN_ranking(detections, top_k_nei
       score = -Inf;
     end
   end
-
 end
