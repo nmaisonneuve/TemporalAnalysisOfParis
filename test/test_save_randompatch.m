@@ -45,7 +45,11 @@ mkdir(root_dir);
 
 for i = 1: 10
 
-[patches, features, ~] = sampleRandomPatches(i, ds, ds.params.seed_patches_per_image);
+
+  load(bg_file_name);
+  
+[patches, features, ~] = sampleRandomPatches(i,imgs, ds.params);
+whiten_feats(features, bg)
 %end
 
 patches_pos = [[patches.x1]' [patches.x2]' [patches.y1]' [patches.y2]'];

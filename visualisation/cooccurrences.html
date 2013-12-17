@@ -71,7 +71,7 @@ Ranking: Node/Clusters sorted by degree network centrality
 
   <!-- HTML template -->
   <script  type="text/template"  id='list_cluster_template'>
-  <% img_path = cluster.centroid.img_path; %>
+      <% img_path = cluster.centroid.img_path; %>
       <tr ><td width='100' style='padding-top:10px'> 
             <b style='font-size:13px'>Candidate <%= cluster.id %> (centrality: 
               <%= cluster.nn.length %>)</b> 
@@ -83,7 +83,7 @@ Ranking: Node/Clusters sorted by degree network centrality
           nb_displayed_members = Math.min(300, cluster.nn.length);
          for (var i = 0; i< nb_displayed_members ; i++) {
             image = cluster.nn[i];
-            img_path = image.img_path;
+            img_path = image.centroid.img_path;
             if (image.score < threshold)
               continue;
 

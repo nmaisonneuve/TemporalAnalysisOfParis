@@ -28,6 +28,33 @@ end
 bg
 
 
+% Define model structure
+model = initmodel(name,pos,bg);
+%skip models if the HOG window is too skewed
+if(max(model.maxsize)<4*min(model.maxsize))
+
+  %get image patches
+  warped=warppos(name, model, pos);
+
+  %flip if necessary
+  if(isfield(pos, 'flipped'))
+    fprintf('Warning: contains flipped images. Flipping\n');
+    for k=1:numel(warped)
+      if(pos(k).flipped)
+        warped{k}=warped{k}(:,end:-1:1,:);
+      end
+    end
+  end
+end
+
+
+% Learn by linear discriminant analysis
+model = learn(name,model,warped);
+model.w=model.w./(norm(model.w(:))+eps);
+model.thresh = 0.5;
+model.bg=[];
+model.name=name;
+
 end
 
 

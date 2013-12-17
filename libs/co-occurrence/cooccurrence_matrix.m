@@ -1,10 +1,6 @@
 
 % members_idx [ row = cluster_id , cols = patch id of the members ] 
 function co_occurrence_matrix = cooccurrence_matrix(candidates, detections, params)
-  
-  if nargin < 3
-    method =   'image';
-  end
 
   %config();
   % create co-occurrence matrix
@@ -32,9 +28,6 @@ function co_occurrence_matrix = cooccurrence_matrix(candidates, detections, para
     switch (params.context)
       case 'image'
         clusters_co(i,3) =  jaccard_coefficient(patches_a, patches_b);
-        if (clusters_co(i,3) < 0.05)
-          clusters_co(i,3) = 0;
-        end
       case 'area'
         overlaps = overlap_cooccurrence(patches_a(:,[2 4:7]), patches_b(:,[2 4:7]), params.overlap_threshold);
         clusters_co(i,3) =  size(overlaps,1);
@@ -55,7 +48,7 @@ function co_occurrence_matrix = cooccurrence_matrix(candidates, detections, para
     detections_idx = candidates(clusters_co(idx,column_id)).nn_detections_idx;
       % only the positive
       if (only_positive_detections)
-        pos_nn_idx = [candidates(clusters_co(idx,column_id)).labels == params.positive_label];
+        pos_nn_idx = [ismember(candidates(clusters_co(idx,column_id)).labels, params.positive_label)];
         detections_idx = detections_idx(pos_nn_idx);
       end 
   end

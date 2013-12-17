@@ -1,4 +1,4 @@
-function warped = warppos(name, model, pos)
+function warped = warppos(model, pos)
 % warped = warppos(name, model, pos)
 % Warp positive examples to fit model dimensions.
 % Used for training root filters from positive bounding boxes.

@@ -46,7 +46,7 @@ $(function() {
   experiment_name = getParameterByName('experiment');
   context = getParameterByName('context');
   if (context == '') {
-    context = 'jaccard';
+    context = 'image';
   }
 
    console.log(experiment_name);
@@ -64,7 +64,7 @@ $(function() {
 
   console.log(experiment_name);
 
-  $.getJSON("../results/"+experiment_name+"/cooccurrence/clustering_"+context+".json", function(_clusters) {
+  $.getJSON("../results/"+experiment_name+"/cooccurrence/"+context+"/clusters.json", function(_clusters) {
     clusters = _clusters;  
     visualize_list_clusters(clusters);
   });

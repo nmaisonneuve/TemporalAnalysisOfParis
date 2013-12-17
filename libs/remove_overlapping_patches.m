@@ -1,4 +1,4 @@
-% remove overlapping patches beyond a threshold
+% remove overlapping patches beyond a threshold based on priority
 % and keep only the candidates with the highest purity/priority score
 function to_keep_patches_idx = remove_overlapping_patches(patches, threshold, priority)
   

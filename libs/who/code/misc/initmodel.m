@@ -1,4 +1,4 @@
-function model = initmodel(name, pos, bg)
+function model = initmodel(pos, bg)
 
 % model = initmodel(name, pos, bg)
 % Initialize model structure.
@@ -19,7 +19,7 @@ function model = initmodel(name, pos, bg)
 % pick mode of aspect ratios
 h = [pos(:).y2]' - [pos(:).y1]' + 1;
 w = [pos(:).x2]' - [pos(:).x1]' + 1;
-
+clearvars 'exp';
 xx = -2:.02:2;
 filter = exp(-[-100:100].^2/400);
 aspects = hist(log(double(h)./double(w)), xx);

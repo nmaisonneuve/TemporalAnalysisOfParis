@@ -5,16 +5,23 @@ function clusters = save_candidates_to_json(candidates, patches, detections, jso
 
   %for c_idx = 1:size(patches,1);
   clusters = struct();
+  tic;
   for i = 1:numel(candidates);
     
-    clusters(i).id = candidates(i).id;
-    clusters(i).purity = candidates(i).purity; 
-    
     c_idx = candidates(i).id;
+    
+    clusters(i).id = c_idx;
+    clusters(i).purity = candidates(i).purity;
+    clusters(i).frequency = candidates(i).frequency;
+    clusters(i).purity_k = candidates(i).purity_k;
+    clusters(i).frequency_k = candidates(i).frequency_k;
+    clusters(i).mean = candidates(i).mean;
+
     % the centroids
     centroid = struct();
     centroid.img_path = patches(c_idx,:);
     centroid.size = patch_size(patches(c_idx,2:5));
+   
     clusters(i).centroid = centroid;
     
     % the related Nearest neighboors patches [img_id, patch_id]
@@ -29,6 +36,6 @@ function clusters = save_candidates_to_json(candidates, patches, detections, jso
     end
     clusters(i).nn = nn;
   end
-  
+  toc;
   savejson('',clusters,json_file);
 end

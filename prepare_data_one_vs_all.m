@@ -3,7 +3,7 @@ function [selected_imgs, pos_idx] = prepare_data_one_vs_all(positive_label, para
   load('data/all_paris_data.mat');
   
   negative_labels = unique([imgs.label]);
-  negative_labels(negative_labels == positive_label) = [];
+  negative_labels(ismember(negative_labels,positive_label)) = [];
 
   % take a subset/sample of data with positive labels
   pos_idx = find(ismember([imgs.label], positive_label));

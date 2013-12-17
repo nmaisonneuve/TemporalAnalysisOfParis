@@ -7,11 +7,11 @@
   <meta name="description" content="">
   <meta name="author" content="nm">
 
-  <!-- Le styles -->
+  <!-- Le styles  -->
 
   <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet">
-  <!-- Custom styles for this template -->
-  <link href="http://getbootstrap.com/examples/offcanvas/offcanvas.css" rel="stylesheet">
+  <!-- Custom styles for this template 
+  <link href="http://getbootstrap.com/examples/offcanvas/offcanvas.css" rel="stylesheet">-->
 
   <script src="jquery.min.js"></script>
   <script src="underscore-min.js"></script>
@@ -33,6 +33,7 @@
       .color_11 {border: 2px solid #FE2E9A}
       .current_period{font-size:16px;font-weight:bold;color:#000}
       .space {margin:1px;}
+      .morevisible{font-size:11px;}
       .period_color_class {display:block;height:20px;width:50px;}
       td.menu {padding-right:10px;padding-left:10px;margin-left:10px;text-align:center;}
        /* define margin as you see fit */
@@ -46,6 +47,8 @@
   </h1>
 
   <ul>
+       <li> <b>Data:</b> Google Street view images (no ground floor) + cadastre data from Paris. </li>
+       
   <li></b> list of experiments
    <table CELLSPACING="3" border='#f00'>
 <tr>
@@ -61,9 +64,9 @@
 <td class='menu' ><a id='period_11' href='?experiment=exp_one_vs_all_period11'> 2000 + </a></td>
 </tr>
 </tr>
-<td></td>
-<td></td>
-<td></td>
+<td><div class='period_color_class' style='background-color:#FF0000'></div></td>
+<td><div class='period_color_class' style='background-color:#DF7401'></div></td>
+<td><div class='period_color_class' style='background-color:#D7DF01'></div></td>
 <td><div class='period_color_class' style='background-color:#80FF00'></div></td>
 <td><div class='period_color_class' style='background-color:#00FF80'></div></td>
 <td><div class='period_color_class' style='background-color:#01DFA5'></div></td>
@@ -72,7 +75,7 @@
 <td><div class='period_color_class' style='background-color:#A901DB'></div></td>
 <td><div class='period_color_class' style='background-color:#FE2E9A'></div></td>
 </tr>
-<tr>
+<!-- <tr>
 <td></td>
 <td></td>
 <td></td>
@@ -84,35 +87,42 @@
 <td>typical elements of social buildings (<a href'http://en.wikipedia.org/wiki/HLM'>HLM</a>) e.g.  small simple square windows <a href='#cluster_2816'>2816</a> <a href='#cluster_923'>923</a> , <a href='#cluster_3444'>3444</a>,<a href='#cluster_5332'>5332</a> , <a href='#cluster_5297'>5297</a>, with typical wall <a href='#cluster_346'>346</a>, <a href='#cluster_2635'>2635</a>, <a href='#cluster_4058'>4058</a> </td>
 <td></td>
 <td></td>
-</tr>
+</tr> -->
 
 </table>
   </li>
+
+
     <li>
       <b>Description </b> Top 5% most discriminative clusters of visual elements coming from the facade of buildings in Paris for a given time period.  Colored border of each visual element = period time. (multi-scale discovery method)
     </li>
-    <li> <b>Data:</b> Google Street view images (no ground floor) + cadastre data from Paris. </li>
+ 
     <li>
-      <b>List sorted by  </b>:
-        <a id='sort_purity' class='btn btn-sm btn-primary' href='#'>only Purity</a> (purity score = positive elements / number of elements in the cluster)
-
-          <a id='sort_scale' class='btn btn-sm  btn-primary' href='#'>Scale level + purity</a>
-       
-   
-    </li>
-    <li> <b>Associatin rules / co-occurence graph</b>: lots of candidates are similar or 'fire' on similar context. To cluster them we're testing several definitions of context to compute the co-occurences of their detections. 
+      <b>Ranking</b>:
+      <a class='sort' data-sort='purity' href='#'>purity</a>, 
+     <a class='sort' data-sort='frequency' href='#'>frequency</a>, 
+     <a class='sort' data-sort='mean' href='#'>harmonic mean</a> 
+     </li>
+     <li>
+    <b>Group by: </b>
+     
+          <a class='group' data-group='size' href='#'>Patch size </a> ,   
+         
+          <a class='group' data-group='no' href='#'>no group</a>
+</li>
+    <li> <b>Learning Association rules / co-occurence graph</b>: lots of detectors 'fire' on similar context. To discover and analyse such associations we're testing several definitions of context and compute co-occurences metrics based on their set of detections. 
       <ul>
       <li><a href='#' id='cooccurrence_image_link'> context  = shared image</a>.
-      link = probability that they fire on the image</li>
+      </li>
       <li>
-       <a href='#' id='cooccurrence_overlap_link'>context = shared visuel space (overlap)</a> - probability that they fire on the image and overlap</li>
+       <a href='#' id='cooccurrence_overlap_link'>context = shared  pixel/overlap space (overlap)</a> </li>
        </ul>
     </li>
   </ul>
 
   <div  >
 
-    <div id='scale_menu'></div>
+
   </div>
 
   <div id='clusters'></div>
@@ -120,13 +130,12 @@
 
   <!-- HTML template -->
   <script  type="text/template"  id='levels_template'>
-     <h3>Scales of visual elements </h3>
-     <p>(rought approximation of the real physical size of the discriminative visual elements)<ul>
+    <ul>
     <% for (var i = 0; i< levels.length ; i++) { %>
    <li style='display: inline;'>
     <a href='#clusters_scale_<%= i %>'  style='width:120px'><%= levels[i] %>px (<%= (groups[levels[i]]).length %>)</a>
    </li>
-   <% } %></ul></h3>
+   <% } %></ul>
  </script>
 
   <script  type="text/template"  id='list_clusters_scale_template'>
@@ -139,25 +148,28 @@
     </table>
   </script>
 
-  <script  type="text/template"  id='list_cluster_template'>
-      <tr><td width='100' id='cluster_<%=cluster.id %>'> 
-            <b style='font-size:13px'>Cluster <%= cluster.id %></b>
-            <br/> score: <%= cluster.purity %></td>
-          <% if (cluster.centroid.img_path != undefined) {
-              img_path = cluster.centroid.img_path;
-           %>
-          <td>
-            <br/><span style='font-size:10px'>centroid-level <%= cluster.centroid.level %></span>
-            <br/><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='90' height='90' /></td>
-          <% } %>
-          <td>
-         <% 
-          //var i =1 and not 0 to remove the centroid
-         for (var i = 0; i< cluster.nn.length ; i++) {
-            image = cluster.nn[i];
+ <script  type="text/template"  id='list_images_template'>
+<% for (var i = 0; i< images.length ; i++) {
+            image = images[i];
             img_path = image.img_path;
             style = "color_"+image.label;
-         %><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' class='space <%= style %>' title='from image:<%= img_path[0] %>'/><% } %></td>
+         %><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' class='space <%= style %>' title='from image:<%= img_path[0] %>'/><% 
+       } %>
+ </script>
+
+  <script  type="text/template"  id='list_cluster_template'>
+      <tr>
+      <td width='120' id='cluster_<%=cluster.id %>' style=''> 
+            <b style='font-size:13px'>Cluster <%= cluster.id %></b>
+            <br/> purity: <%= cluster.purity.toFixed(2) %> (<%= cluster.purity_k %>)
+            <br/> frequency: <%= cluster.frequency.toFixed(2) %><% 
+          nb_visible_detections = Math.min(0, cluster.nn.length);
+          img_path = cluster.centroid.img_path; %>
+          </td>
+      <td><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='90' height='90' /><br/><span style='font-size:10px'>centroid-level <%= cluster.centroid.size %></span>
+      </td>
+      <td><%= display_list_images(cluster.nn) %></td>
+    </tr>
        
     </script>
 </body>

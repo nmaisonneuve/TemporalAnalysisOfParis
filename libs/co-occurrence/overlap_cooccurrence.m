@@ -38,9 +38,11 @@ function overlaps = overlap_cooccurrence(patches_a, patches_b, min_overlap_thres
     inter_area = patch_intersection_basic(img_patches_a, img_patches_b);
     inter_relative = inter_area ./min_area ;
     img_overlaps = find(inter_relative > min_overlap_threshold);
+   
     if (~isempty(img_overlaps))
       overlaps = [overlaps; [pairs(img_overlaps,1) pairs(img_overlaps,2) inter_relative(img_overlaps) shared_images(i)*ones(numel(img_overlaps,1),1)]];
     end
+    
   end
  
 end

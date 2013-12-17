@@ -17,6 +17,7 @@ end
 
 
 [ny,nx,nf] = size(model.w);
+fprintf('\nmodel %d %d %d', [ny,nx,nf]);
 nf = nf - 1;
 
 [R,neg] = whiten(model.bg,nx,ny);
@@ -25,16 +26,20 @@ num  = length(warped);
 feats = zeros(ny*nx*nf,num);
 for i = 1:num,
   im   = warped{i};
-  feat = features(double(im),model.sbin);
+ % imshow(im);
+ % pause();
   
-  %showHOG(feat);
-  %pause;
-  feat = feat(:,:,1:end-1);
-  %f1=R'\(feat(:)-neg);
-  %f1=reshape(f1,[ny nx nf]);
-  %f1(:,:,end+1)=0;
-  %showHOG(f1);
-  %pause;
+  feat = features(double(im),model.sbin);
+%   fprintf('\nnormal features');
+%   showHOG(feat);
+%   pause;
+   feat = feat(:,:,1:end-1);
+%   f1=R'\(feat(:)-neg);
+%   f1=reshape(f1,[ny nx nf]);
+%   f1(:,:,end+1)=0;
+%   fprintf('\nwihtened features');
+%   showHOG(f1);
+%   pause;
   feats(:,i) = feat(:);
 end
 

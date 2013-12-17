@@ -29,14 +29,14 @@ $(function() {
   experiment_name = getParameterByName('experiment');
   context = getParameterByName('context');
   if (context== '')
-  context = 'jaccard';
+  context = 'image';
    console.log(experiment_name);
   if (experiment_name == '')
     experiment_name = 'exp1';
   $("#experiment_id").html("experiment "+experiment_name);
 
   console.log(experiment_name);
-  $.getJSON("../results/"+experiment_name+"/cooccurrence/cooccurrences_"+context+".json", function(_clusters) {
+  $.getJSON("../results/"+experiment_name+"/cooccurrence/"+context+"/cooccurrences.json", function(_clusters) {
     clusters = _clusters;
     visualize(clusters);   
   });

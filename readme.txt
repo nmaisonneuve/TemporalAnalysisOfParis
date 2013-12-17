@@ -14,7 +14,9 @@ check config.m
 
 %% RUNNING
 
-time / complexity of the algo
+- time / complexity of the algo
+- minimizing the numbere of detectors
+- maximixing the inter class gap.
 
 run experimentX.m
 - scaling 

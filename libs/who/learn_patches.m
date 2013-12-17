@@ -16,17 +16,15 @@ function models = learn_patches(patches, imgs)
   for (i = 1:size(patches,1))
     pos = struct();
     name = '1';
-    pos.y1 = patches(i,2);
-    pos.y2 = patches(i,3);
     pos.x1 = patches(i,4);
+    pos.y1 = patches(i,2);
     pos.x2 = patches(i,5);
+    pos.y2 = patches(i,3);
     pos.im = imgs(patches(i,1)).path;
-    
-   % im=imread(pos(1).im);
-   % figure(1);
-   % disp(pos);
-   % disp(size(im));
-   % showboxes(im ,[pos(1).x1 pos(1).y1 pos(1).x2 pos(1).y2]);
+ 
+    im=imread(pos.im);
+  
+    showboxes(im ,[pos.x1 pos.y1 pos.x2 pos.y2]);
 
 
     % Define model structure
@@ -35,7 +33,7 @@ function models = learn_patches(patches, imgs)
     if(max(model.maxsize)<4*min(model.maxsize))
 
     %get image patches
-    warped=warppos(name, model, pos);
+    warped=warppos(model, pos);
 
     %flip if necessary
     if(isfield(pos, 'flipped'))
@@ -53,7 +51,6 @@ function models = learn_patches(patches, imgs)
     model.w=model.w./(norm(model.w(:))+eps);
     model.thresh = 0.5;
     model.bg=[];
-    model.name=name;
     models{i} = model;
   end  
 end

@@ -4,10 +4,10 @@ data_step1_filename = sprintf('data/step1_%s.mat',ds.params.experiment_name);
 data_step2_filename = sprintf('data/step2_%s.mat',ds.params.experiment_name);
 
 switch loaded_state
-  case 2
+  case 1
     disp('loading workspace at step 2');
     load(data_step2_filename);
-  case 1
+  case 2
     disp('loading workspace at step 1');
     load(data_step1_filename);
 end
@@ -36,7 +36,7 @@ if (loaded_state < 2)
   disp('saved workspace at step 2');
 end
 
-visualisation;
+
 
 % STEP 3 : to continue...
 %%% STEP 2 - computing their K-nearest neighbors for all the images
@@ -49,8 +49,17 @@ if (loaded_state  < 3)
   save(data_step3_filename);
   disp('saved workspace at step 3');
 end
+visualisation;
+
+if (loaded_state  < 4)
+   step4_cooccurence_analysis;
+ 
+  % save workspace
+  clearvars loaded_state;
+  save(data_step3_filename);
+  disp('saved workspace at step 3');
+end
 
 
 
-%cooccurrence;
 

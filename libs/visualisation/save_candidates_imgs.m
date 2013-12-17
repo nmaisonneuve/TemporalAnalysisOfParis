@@ -6,7 +6,7 @@ function save_candidates_imgs(candidates, patches, detections, imgs, img_dir)
   % (centroids + members of clusters) to crops
   patches_to_crops = patches([candidates.id],:);
   
-  for i = 1:numel(candidates)
+  parfor i = 1:numel(candidates)
     
     % the related Nearest neighboors patches [img_id, patch_id]
     nn_patches = detections(candidates(i).nn_detections_idx,[2 4:7]);

@@ -27,15 +27,15 @@ ds.params = struct(...,
   'scaleIntervals', 8, ...% number of levels per octave in the HOG pyramid 
   'patchOverlapThreshold', 0.5, ...%detections (and random samples during initialization) with an overlap higher than this are discarded.
   'levelFactor', 2, ... % number of levels for pyramid HOG 
-  'min_representativeness',0.05); % in the first step , number of nearest neighboors used to compute purity as a ratio of the number of positive images.
+  'discriminativity_threshold',0.7, ...
+  'representativity_threshold',0.05);% in the first step , the ratio of nearest neighboors used to compute purity as a ratio of the number of positive images.
 
 %%%%% SETUP DATA FOR THIS EXPERIMENT
 
 % load imgs data
 % define positive and negative labels
-positive_label = 1;
+positive_label = [1 2];
 ds.params.experiment_name = [ds.params.experiment_name num2str(positive_label)];
-disp(ds.params);
 [imgs, pos_idx] = prepare_data_one_vs_all(positive_label, ds.params);
 
 
@@ -43,7 +43,7 @@ disp(ds.params);
 experiment_dir = sprintf('results/%s',ds.params.experiment_name);
 mkdir(experiment_dir);
 
-loaded_state = 2;
+loaded_state = 0;
 main;
 
 %% POST PROCESSING

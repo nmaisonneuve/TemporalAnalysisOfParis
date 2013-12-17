@@ -2,7 +2,7 @@ function pyramid = constructFeaturePyramidForImg(im, params, levels)
 % levels: What level of pyramid to compute the features for.
 %
 % Author: saurabh.me@gmail.com (Saurabh Singh).
-
+load(bg_file_name);
 canonicalSize = params.imageCanonicalSize;
 sBins = params.sBins;
 
@@ -64,6 +64,10 @@ for i = 1 : length(levels)
   
   
   if(params.useColor)
+    
+    disp(size(feat));
+    feat = whiten_feats(feat(:,:,1:31), bg);
+    disp(size(feat));
     feat=cat(3,feat(:,:,1:31),imresize(im2(:,:,2),[rows cols],'bilinear'),imresize(im2(:,:,3),[rows cols],'bilinear'));
   elseif(params.useColorHists)
     for(k=2:3)

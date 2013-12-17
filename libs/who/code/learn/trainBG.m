@@ -19,6 +19,7 @@ BG.maxsize = [0 0];
 fprintf('Learning negative mean\n');
 bhcnt=0;
 for I = all,
+  fprintf('\n from %s', I.im);
   bhcnt=bhcnt+1;
   if(rem(bhcnt,100)==0), fprintf('.'); end
   im = imread(I.im);
