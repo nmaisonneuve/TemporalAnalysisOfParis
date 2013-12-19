@@ -22,15 +22,33 @@ function co_occurrence_matrix = cooccurrence_matrix(candidates, detections, para
     patches_a = detections(detections_a_idx,:);
     patches_b = detections(detections_b_idx,:);
 
-    % image co-occurrency:  present in the same images ?
-    % nb_images = numel(intersect(patches_a(:,2), patches_b(:,2)));
-    %clusters_co(i,3) =  nb_images;
     switch (params.context)
+      
       case 'image'
+        % image co-occurrency:  present in the same images ?
         clusters_co(i,3) =  jaccard_coefficient(patches_a, patches_b);
+      
       case 'area'
         overlaps = overlap_cooccurrence(patches_a(:,[2 4:7]), patches_b(:,[2 4:7]), params.overlap_threshold);
-        clusters_co(i,3) =  size(overlaps,1);
+        
+        if (~isempty(overlaps))
+        % ideal: score = 1 if each detection of each detector overlap 
+        % (with a given threshold) with at least one 
+        % detection of the detector
+        
+        % number of different detections
+        union = size(patches_a,1) + size(patches_b,1);
+        
+        %  how many of the detections overlap with another one?
+        inter = numel(unique(overlaps(:,1))) + numel(unique(overlaps(:,2)));
+        
+        co_occurrence  = inter / union;
+       % fprintf('\n  %d on %d detections overlapping (%f)', inter, union, co_occurrence);
+        clusters_co(i,3) = co_occurrence;
+        else
+        clusters_co(i,3) = 0;
+          
+        end
         %fprintf('\n%d overlapping candidates',clusters_co(i,3));
       otherwise
         fprintf('\nERROR method not recognized');

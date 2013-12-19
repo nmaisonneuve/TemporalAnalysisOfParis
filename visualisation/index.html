@@ -98,10 +98,10 @@
     </li>
  
     <li>
-      <b>Ranking</b>:
-      <a class='sort' data-sort='purity' href='#'>purity</a>, 
-     <a class='sort' data-sort='frequency' href='#'>frequency</a>, 
-     <a class='sort' data-sort='mean' href='#'>harmonic mean</a> 
+      <b>Ranked by</b>:
+      <br/><a class='sort' data-sort='purity' href='#'>purity / precision</a> (% of detections with positive label), 
+     <br/><a class='sort' data-sort='frequency' href='#'>frequency / recall</a> (% of positive images where there is at least one detection of this patch) , 
+     <br/><a class='sort' data-sort='mean' href='#'>harmonic mean</a> 
      </li>
      <li>
     <b>Group by: </b>
@@ -110,12 +110,12 @@
          
           <a class='group' data-group='no' href='#'>no group</a>
 </li>
-    <li> <b>Learning Association rules / co-occurence graph</b>: lots of detectors 'fire' on similar context. To discover and analyse such associations we're testing several definitions of context and compute co-occurences metrics based on their set of detections. 
+    <li><b>Associative/Hebbian learning & co-occurence graph</b>: lots of detectors 'fire' on similar context. To discover and analyse such associations we're testing several definitions of context
       <ul>
       <li><a href='#' id='cooccurrence_image_link'> context  = shared image</a>.
       </li>
       <li>
-       <a href='#' id='cooccurrence_overlap_link'>context = shared  pixel/overlap space (overlap)</a> </li>
+       <a href='#' id='cooccurrence_overlap_link'>context = shared region (overlap)</a> </li>
        </ul>
     </li>
   </ul>

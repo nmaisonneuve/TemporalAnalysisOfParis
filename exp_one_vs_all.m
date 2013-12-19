@@ -34,25 +34,76 @@ ds.params = struct(...,
 
 % load imgs data
 % define positive and negative labels
-positive_label = [1 2];
+positive_label = 8;
 ds.params.experiment_name = [ds.params.experiment_name num2str(positive_label)];
 [imgs, pos_idx] = prepare_data_one_vs_all(positive_label, ds.params);
 
 
-%%% MAIN ALGO
+%% MAIN ALGO
 experiment_dir = sprintf('results/%s',ds.params.experiment_name);
 mkdir(experiment_dir);
 
 loaded_state = 0;
-main;
 
-%% POST PROCESSING
+%%%% STEP 1 - computing seed candidate patches
+data_step1_filename = sprintf('data/step1_%s.mat',ds.params.experiment_name);
+data_step2_filename = sprintf('data/step2_%s.mat',ds.params.experiment_name);
+
+switch loaded_state
+  case 1
+    disp('loading workspace at step 2');
+    load(data_step2_filename);
+  case 2
+    disp('loading workspace at step 1');
+    load(data_step1_filename);
+end
+
+% STEP 1 - generate pseudo-randomly some candidate
+% discriminative patches/detectors
+if (loaded_state < 1)
+  step1_generate_candidates;
+  
+  % save workspace
+  clearvars image_patches;
+  save(data_step1_filename);
+  disp('saved workspace at step 1');
+end
 
 
-% histogram according ot patch level of the top k clusters
-%[height, width] = patch_size(patches(best_clusters_idx,2:5));
-%fh = figure;
-%hist(height);
-%saveas(fh, [experiment_dir '/hist_patch_level'], 'jpg');
-%close(fh)
+%%% STEP 2 - computing their K-nearest neighbors for all the images
+if (loaded_state < 2)
+   detections = step2_knn_detections(initFeats,imgs,ds.params);
+ 
+  % save workspace
+  tmp = loaded_state;
+  clearvars loaded_state;
+  save(data_step2_filename);
+  loaded_state = tmp;
+  disp('saved workspace at step 2');
+end
 
+
+
+%%% STEP 3 - ranking detectors 
+data_step3_filename = sprintf('data/step3_%s.mat',ds.params.experiment_name);
+if (loaded_state  < 3)
+   step3_ranking;
+ 
+  % save workspace
+  clearvars loaded_state;
+  save(data_step3_filename);
+  disp('saved workspace at step 3');
+end
+
+step_visualisation;
+
+%% STEP 4 - bulding cooccurrence graph & co.
+data_step4_filename = sprintf('data/step4_%s.mat',ds.params.experiment_name);
+if (loaded_state  < 4)
+   step4_cooccurence_analysis;
+ 
+  % save workspace
+  clearvars loaded_state;
+  save(data_step4_filename);
+  disp('saved workspace at step 4');
+end

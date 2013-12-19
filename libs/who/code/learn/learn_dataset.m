@@ -1,4 +1,4 @@
-function model = learn_dataset(pos, neg, name)
+function model = learn_dataset(pos, neg)
 % model = learn_dataset(pos, neg, name)
 % pos is a struct array for the positive patches, with fields:
 %	im: full path to the image
@@ -25,16 +25,15 @@ catch
   bg  = trainBG(all,20,5,8);
   save(file,'bg');
 end
-bg
 
 
 % Define model structure
-model = initmodel(name,pos,bg);
+model = initmodel(pos,bg);
 %skip models if the HOG window is too skewed
 if(max(model.maxsize)<4*min(model.maxsize))
 
   %get image patches
-  warped=warppos(name, model, pos);
+  warped=warppos( model, pos);
 
   %flip if necessary
   if(isfield(pos, 'flipped'))
@@ -45,16 +44,15 @@ if(max(model.maxsize)<4*min(model.maxsize))
       end
     end
   end
+  model = learn(model,warped);
 end
 
 
 % Learn by linear discriminant analysis
-model = learn(name,model,warped);
+
 model.w=model.w./(norm(model.w(:))+eps);
 model.thresh = 0.5;
 model.bg=[];
-model.name=name;
-
 end
 
 

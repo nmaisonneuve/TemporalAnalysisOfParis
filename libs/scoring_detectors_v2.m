@@ -70,7 +70,7 @@ parfor (i = 1:nb_candidates)
   end
   toc;
 
-  
+  % computing entropy
   function score = compute_entropy(labels)
     [p, ~ ] = hist(labels,period_labels);
     [~, mode_idx] = max(p); % if mode  == positive label

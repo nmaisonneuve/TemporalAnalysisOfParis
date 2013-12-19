@@ -21,10 +21,10 @@ function models = learn_detectors(detectors, detections, imgs, params)
     pos_nn_idx = [ismember(detectors(i).labels, params.positive_label)]';
     detections_idx = detections_idx(pos_nn_idx);
     
-
-    fprintf('\n%d learning detector based on %d positive detections',i, numel(detections_idx));
+    max_training_samples = min(numel(detections_idx), 5);
+    fprintf('\n%d learning detector based on %d positive detections',i, max_training_samples);
    
-    max_training_samples = min(numel(detections_idx), 20);
+    
     % for each positive detection
     % prepare the data
     pos = struct();
@@ -42,13 +42,13 @@ function models = learn_detectors(detectors, detections, imgs, params)
   function model = internal_learn_model(pos, bg)
     name = '1';
     % Define model structure
-    model = initmodel(name,pos,bg);
+    model = initmodel(pos,bg);
     
     %skip models if the HOG window is too skewed
     if(max(model.maxsize)<4*min(model.maxsize))
 
       %get image patches
-      warped=warppos(name, model, pos);
+      warped=warppos( model, pos);
 
       %flip if necessary
       if(isfield(pos, 'flipped'))

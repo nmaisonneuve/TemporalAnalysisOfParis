@@ -72,7 +72,7 @@ Ranking: Node/Clusters sorted by degree network centrality
   <!-- HTML template -->
   <script  type="text/template"  id='list_cluster_template'>
       <% img_path = cluster.centroid.img_path; %>
-      <tr ><td width='100' style='padding-top:10px'> 
+      <tr ><td width='100' style='padding-top:10px' id='patch_<%= cluster.id %>'> 
             <b style='font-size:13px'>Candidate <%= cluster.id %> (centrality: 
               <%= cluster.nn.length %>)</b> 
             <br/><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='90' height='90' /></td>

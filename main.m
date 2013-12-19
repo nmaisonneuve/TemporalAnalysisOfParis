@@ -49,15 +49,17 @@ if (loaded_state  < 3)
   save(data_step3_filename);
   disp('saved workspace at step 3');
 end
-visualisation;
 
+step_visualisation;
+
+data_step4_filename = sprintf('data/step4_%s.mat',ds.params.experiment_name);
 if (loaded_state  < 4)
    step4_cooccurence_analysis;
  
   % save workspace
   clearvars loaded_state;
-  save(data_step3_filename);
-  disp('saved workspace at step 3');
+  save(data_step4_filename);
+  disp('saved workspace at step 4');
 end
 
 

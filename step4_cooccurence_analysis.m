@@ -9,7 +9,7 @@ co_params.context = 'area';
 co_params.only_positive = 1;
 co_params.positive_label = positive_label;
 co_params.overlap_threshold = 0.1;
-co_params.noise_threshold = 1;
+co_params.noise_threshold = -1;
 
 context_dir = sprintf('%s/%s',co_dir,co_params.context);
 mkdir(context_dir);
@@ -17,7 +17,6 @@ mkdir(context_dir);
 tic;
 [co_matrix, co_cluster_idx] = cooccurrence_analysis(candidates(top_detectors_idx), detections, co_params);
 toc;
-
   
 tic;
 save_cooccurrences(co_matrix, co_cluster_idx, patches([candidates(top_detectors_idx).id],:), context_dir);

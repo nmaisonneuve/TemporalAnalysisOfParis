@@ -10,9 +10,16 @@ function im = gen_heatmap(im, patches)
     [width, height] = patch_size(patches);
     % compute heatmap
     weight = 1 ; %(max_weight)/(size(patches,1));
-    heatmap = zeros(size(im,1),size(im,2));
+    width = size(im,2);
+    height = size(im,1);
+    heatmap = zeros(height,width);
+    % crop ??!
+    patches(:,4) = min( width, patches(:,4));
+    
     for (i = 1: size(patches,1))
-      %fprintf('\n patches %d, %d', width(i), height(i));
+     % fprintf('\n patches %d, %d max(%d), %d %d max (%d)', patches(i,1), patches(i,2), size(im,1), patches(i,3),patches(i,4),size(im,2));
+      % crop ?!
+      
       heatmap(patches(i,1):patches(i,2),patches(i,3):patches(i,4)) = weight ...
         + heatmap(patches(i,1):patches(i,2),patches(i,3):patches(i,4));
     end

@@ -1,7 +1,7 @@
 function [boxes, feats] = detect(im,model,thresh,return_feats)
 % Detect model in images
 if(nargin<4)
-	return_feats=0;
+	return_feats = FALSE;
 end
 feats=[];
 pyra     = featpyramid(im,model);
@@ -26,17 +26,21 @@ for l = levels,
   
   [y,x] = find(resp >= thresh);
   I  = (x-1)*size(resp,1)+y;
-  if(~isempty(I) & return_feats)
-  tic
-  f1=zeros(sizx*sizy*(size(model.w,3)),numel(y));
-  for k=1:numel(y)
-	f2=pyra.feat{l}(y(1):y(1)+sizy-1,x(1):x(1)+sizx-1,:);
-	%remove last feature
-	%f2=f2(:,:,1:end-1);
-	f1(:,k)=f2(:);
-  end
-  feats=[feats f1];
-  t=t+toc;
+ % fprintf('\n empty %d',isempty(I));
+ % fprintf('\n size %d %d',size(I));
+  
+  if((~isempty(I)) & return_feats)
+    tic;
+    f1=zeros(sizx*sizy*(size(model.w,3)),numel(y));
+    for k=1:numel(y)
+    f2=pyra.feat{l}(y(1):y(1)+sizy-1,x(1):x(1)+sizx-1,:);
+      %remove last feature
+      %f2=f2(:,:,1:end-1);
+      f1(:,k)=f2(:);
+    end
+    feats=[feats f1];
+    t=t+toc;
+    %fprintf('\nasdads');
   end
 
   x1 = (x-1-padx)*scale+1;

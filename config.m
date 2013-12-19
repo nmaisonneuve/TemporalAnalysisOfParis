@@ -20,6 +20,7 @@ addpath(genpath('./libs/who/'));
 addpath(fullfile('./test/'));
 
 %parallel computing : opening 4 workers 
+matlabpool close;
 if (matlabpool('size') == 0)
-  matlabpool(3);
+  matlabpool(4);
 end

@@ -136,8 +136,8 @@ $(function() {
     $("#more_visible_"+cluster_id).toggle();
   });
 
-  $("#cooccurrence_image_link").attr('href',"cooccurrences.html?experiment="+experiment_name+"&context=image");
-  $("#cooccurrence_overlap_link").attr('href',"cooccurrences.html?experiment="+experiment_name+"&context=area");
+  $("#cooccurrence_image_link").attr('href',"clustering_cooccurrences.html?experiment="+experiment_name+"&context=image");
+  $("#cooccurrence_overlap_link").attr('href',"clustering_cooccurrences.html?experiment="+experiment_name+"&context=area");
 
   console.log(experiment_name);
   $.getJSON("../results/"+experiment_name+"/candidates.json", function(_clusters) {

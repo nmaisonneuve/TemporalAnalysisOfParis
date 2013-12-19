@@ -26,6 +26,7 @@ function save_img_patches(patches, imgs, dirname)
       mkdir(img_dir);
       last_idx = img_id;
     end
+   % rect = [patch(:,2) patch(:, 4) patch(:,6) patch(:,7)];
      
     rect = [patch(:,4) patch(:, 2) patch(:,6) patch(:,7)];
     

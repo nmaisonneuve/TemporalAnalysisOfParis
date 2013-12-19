@@ -1,6 +1,6 @@
 var template;
-
-
+var  experiment_name ;
+var context ;
 var period_label = {"1": "< 1800",
 "2":"1801-1850",
 "3":"1851-1914",
@@ -23,7 +23,7 @@ visualize_list_clusters = function(clusters){
     if (!(cluster.members instanceof Array))
     cluster.members = [cluster.members];
     cluster.id = i+1;
-     html = _.template(template,{exp: experiment_name, cluster: cluster});
+     html = _.template(template,{exp: experiment_name, cluster: cluster, context:context});
     $("#clusters").append(html);
   }
 }
@@ -59,6 +59,10 @@ $(function() {
   else{
     given_period ='unknown';
   }
+
+  $("#cooccurrence_detail_link").attr('href',"cooccurrences.html?experiment="+experiment_name+"&context="+context);
+  
+
   $("#experiment_id").html("Experiment : "+experiment_name);
   $("#period_id").html(given_period);
 

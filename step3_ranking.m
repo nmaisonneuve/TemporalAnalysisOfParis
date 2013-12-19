@@ -9,10 +9,10 @@ candidates = scoring_detectors_v2(detections,imgs, params);
 toc;
 
 %filter candidates below threshold
-%filter = ([candidates.purity] > params.discriminativity_threshold) & ([candidates.frequency] > params.representativity_threshold);
+filter = ([candidates.purity] > params.discriminativity_threshold) & ([candidates.frequency] > params.representativity_threshold);
 %candidates = candidates(filter);
 
 % sort by a criteria harmonic mean , purity or frequency
-[~, ranked_candidates_idx] = sort([candidates.purity],'descend');
+[~, ranked_candidates_idx] = sort([candidates.mean],'descend');
 
-top_detectors_idx = ranked_candidates_idx(1:300);
+top_detectors_idx = ranked_candidates_idx(1:200);

@@ -1,4 +1,4 @@
-function model = learn(name,model,warped)
+function model = learn(model,warped)
 % model = learn(name,model,warped)
 % warped is set of image patches.
 % name is name of model.
