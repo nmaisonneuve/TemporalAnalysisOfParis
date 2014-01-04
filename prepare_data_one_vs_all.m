@@ -1,12 +1,12 @@
-function [selected_imgs, pos_idx] = prepare_data_one_vs_all(positive_label, params)
+function [selected_imgs, pos_idx] = prepare_data_one_vs_all(positive_labels, params)
   
   load('data/all_paris_data.mat');
   
   negative_labels = unique([imgs.label]);
-  negative_labels(ismember(negative_labels,positive_label)) = [];
+  negative_labels(ismember(negative_labels,positive_labels)) = [];
 
   % take a subset/sample of data with positive labels
-  pos_idx = find(ismember([imgs.label], positive_label));
+  pos_idx = find(ismember([imgs.label], positive_labels));
   pos_idx = pos_idx(randsample(numel(pos_idx), params.pos_sample_size));
 
   % taks a subset of data with negative label

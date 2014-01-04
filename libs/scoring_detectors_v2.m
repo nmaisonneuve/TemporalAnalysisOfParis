@@ -11,7 +11,7 @@ function [candidates] = scoring_detectors_v2(detections, imgs, params)
   nb_candidates = numel(candidates_ids);
   
   number_positive_images = numel(find(ismember([imgs(img_idx).label], params.positive_label)));
-  min_k_neighboors = round(params.representativity_threshold *  number_positive_images);
+  min_k_neighboors = max(1,round(params.representativity_threshold *  number_positive_images));
   
   fprintf('\nRepresentativity: from %d to %d neigboors',  min_k_neighboors , number_positive_images);
     

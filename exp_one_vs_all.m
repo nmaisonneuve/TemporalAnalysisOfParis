@@ -1,7 +1,5 @@
-
-% EXPERIMENT 4
+% EXPERIMENT
 % discovering discriminative patches of a given time period vs the others
-
 
 % clear workspace
 clear;
@@ -9,10 +7,10 @@ clear;
 % load basic configuration
 config();
 
-% set parameters for this experiment
-global ds;
-ds.params = struct(..., 
-  'experiment_name', 'exp_one_vs_all_period',...%<-- NAME OF THE EXPERIMENT: IMPORTANT to differenciate experimental saved results
+% Parameters for this experiment
+params = struct(..., 
+  'positive_labels', 8,...
+  'experiment_name', 'exp_one_vs_all_period' ,...%<-- NAME OF THE EXPERIMENT: IMPORTANT to differenciate experimental saved results
   'pos_sample_size', 500, ... % sample size for positive images % usually 2000 positive images is enough; sometimes even 1000 works
   'neg_sample_size', 1500, ... % sample size for negative images % usually 2000 positive images is enough; sometimes even 1000 works   
   'seed_candidate_size', 250, ... %  ratio from the sample to get the number of images used to get seed patches candidates 
@@ -30,80 +28,63 @@ ds.params = struct(...,
   'discriminativity_threshold',0.7, ...
   'representativity_threshold',0.05);% in the first step , the ratio of nearest neighboors used to compute purity as a ratio of the number of positive images.
 
-%%%%% SETUP DATA FOR THIS EXPERIMENT
-
-% load imgs data
-% define positive and negative labels
-positive_label = 8;
-ds.params.experiment_name = [ds.params.experiment_name num2str(positive_label)];
-[imgs, pos_idx] = prepare_data_one_vs_all(positive_label, ds.params);
 
 
-%% MAIN ALGO
-experiment_dir = sprintf('results/%s',ds.params.experiment_name);
+positive_label = params.positive_labels;
+params.experiment_name = [params.experiment_name num2str(positive_label)];
+
+% create dir where results will be put
+experiment_dir = sprintf('results/%s',params.experiment_name);
 mkdir(experiment_dir);
 
-loaded_state = 0;
 
-%%%% STEP 1 - computing seed candidate patches
-data_step1_filename = sprintf('data/step1_%s.mat',ds.params.experiment_name);
-data_step2_filename = sprintf('data/step2_%s.mat',ds.params.experiment_name);
+% CURRENT STEP OF THE EXPERIMENT
+exp_step = 0;
+running_all = true; % want to run only a specific step or from a spec?
+saving_step = true; % saving step?
 
-switch loaded_state
-  case 1
-    disp('loading workspace at step 2');
-    load(data_step2_filename);
-  case 2
-    disp('loading workspace at step 1');
-    load(data_step1_filename);
+
+% START
+
+
+% loading a given step of the experiment ?
+if (exp_step > 0)
+  disp(['loading experiment at step ' exp_step]);
+  load(data_step_filename);
 end
 
-% STEP 1 - generate pseudo-randomly some candidate
-% discriminative patches/detectors
-if (loaded_state < 1)
-  step1_generate_candidates;
+while (running_all && (exp_step ~= END_STEP))
   
-  % save workspace
-  clearvars image_patches;
-  save(data_step1_filename);
-  disp('saved workspace at step 1');
+  % According to the current step of the experiment
+  switch exp_step
+
+    % STEP  Generate pseudo-randomly some candidate
+    case 0
+      % prepare data 
+      [imgs, pos_idx] = prepare_data_one_vs_all(positive_label, params);   
+      step1_generate_candidates;
+      exp_step = exp_step + 1;
+
+    % STEP  Computing their K-nearest neighbors for all the images
+    case 1    
+      detections = step2_knn_detections(initFeats,imgs,params);
+      exp_step = exp_step + 1;
+
+    % STEP  Ranking detectors 
+    case 2 
+      step3_ranking;
+      step_visualisation;
+      exp_step = exp_step + 1;
+
+    % STEP - Bulding cooccurrence graph & co.  
+    case 3
+      step4_cooccurence_analysis;
+      exp_step = END_STEP;      
+  end
+
+  % save step/workspace into .mat file
+  if saving_step
+    save_step;
+  end
 end
 
-
-%%% STEP 2 - computing their K-nearest neighbors for all the images
-if (loaded_state < 2)
-   detections = step2_knn_detections(initFeats,imgs,ds.params);
- 
-  % save workspace
-  tmp = loaded_state;
-  clearvars loaded_state;
-  save(data_step2_filename);
-  loaded_state = tmp;
-  disp('saved workspace at step 2');
-end
-
-
-
-%%% STEP 3 - ranking detectors 
-data_step3_filename = sprintf('data/step3_%s.mat',ds.params.experiment_name);
-if (loaded_state  < 3)
-   step3_ranking;
- 
-  % save workspace
-  clearvars loaded_state;
-  save(data_step3_filename);
-  disp('saved workspace at step 3');
-end
-
-step_visualisation;
-
-%% STEP 4 - bulding cooccurrence graph & co.
-data_step4_filename = sprintf('data/step4_%s.mat',ds.params.experiment_name);
-if (loaded_state  < 4)
-   step4_cooccurence_analysis;
- 
-  % save workspace
-  clearvars loaded_state;
-  save(data_step4_filename);
-  disp('saved workspace at step 4');
-end
