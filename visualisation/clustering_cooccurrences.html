@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Co-occurence clustering Discovery of visual element discriminative of a given period of time</title> 
+  <title></title> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="nm">
@@ -20,7 +20,7 @@
   <!--[if lt IE 9]>
   <script src="assets/js/html5shiv.js"></script>
   <![endif]-->
- <style type="text/css">
+  <style type="text/css">
       .color_1 {border: 2px solid #FF0000}
       .color_2 {border: 2px solid #DF7401}
       .color_3 {border: 2px solid #D7DF01}
@@ -42,68 +42,145 @@
     </style>
 </head>
 <body>
+  <h2>clusters of visual elements inside a co-occurrence graph</h2>
   <ul>
-    <li>
-      Description: Clustering of patches using a co-occurrence graph
-    </li>
-    <li>
+    <li> <b>List of time periods / experiments</b>
       <table CELLSPACING="3" border='#f00'>
-<tr>
-<td class='menu' ><a id='period_1' href='index.html?experiment=exp_one_vs_all_period1'>- 1800</a></td> 
-<td class='menu' ><a id='period_2' href='index.html?experiment=exp_one_vs_all_period2'>1801-1850 </a></td>
-<td class='menu' ><a id='period_3' href='index.html?experiment=exp_one_vs_all_period3'>1851-1914 </a></td>
-<td class='menu' ><a id='period_5' href='index.html?experiment=exp_one_vs_all_period5'>1915-1939</a></td>
-<td class='menu' ><a id='period_6' href='index.html?experiment=exp_one_vs_all_period6'>1940-1967</a></td>
-<td class='menu' ><a id='period_7' href='index.html?experiment=exp_one_vs_all_period7'>1968-1975</a></td>
-<td class='menu' ><a id='period_8' href='index.html?experiment=exp_one_vs_all_period8'>1976-1981</a></td>
-<td class='menu' ><a id='period_9' href='index.html?experiment=exp_one_vs_all_period9'>1982-1989</a></td>
-<td class='menu' ><a id='period_10' href='index.html?experiment=exp_one_vs_all_period10'>1990-1999</a></td>
-<td class='menu' ><a id='period_11' href='index.html?experiment=exp_one_vs_all_period11'> 2000 + </a></td>
-</tr>
-</tr>
-<td><div class='period_color_class' style='background-color:#FF0000'></div></td>
-<td><div class='period_color_class' style='background-color:#DF7401'></div></td>
-<td><div class='period_color_class' style='background-color:#D7DF01'></div></td>
-<td><div class='period_color_class' style='background-color:#80FF00'></div></td>
-<td><div class='period_color_class' style='background-color:#00FF80'></div></td>
-<td><div class='period_color_class' style='background-color:#01DFA5'></div></td>
-<td><div class='period_color_class' style='background-color:#01A9DB'></div></td>
-<td><div class='period_color_class' style='background-color:#0431B4'></div></td>
-<td><div class='period_color_class' style='background-color:#A901DB'></div></td>
-<td><div class='period_color_class' style='background-color:#FE2E9A'></div></td>
-</tr>
-<!-- <tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>large balcony <a href='#cluster_4310'>4310</a>,  <a href='#cluster_3475'> 3475</a>, very close each other <a href='#cluster_460'>460</a> , in glass/PVC <a href='#cluster_2124'>2124</a>, <a href='#cluster_1843'>1843 </a> or grille <a href='#cluster_1070'>1070</a>, <a href='#cluster_1646'>1646</a> 
-  , </td>
-<td></td>
-<td>typical elements of social buildings (<a href'http://en.wikipedia.org/wiki/HLM'>HLM</a>) e.g.  small simple square windows <a href='#cluster_2816'>2816</a> <a href='#cluster_923'>923</a> , <a href='#cluster_3444'>3444</a>,<a href='#cluster_5332'>5332</a> , <a href='#cluster_5297'>5297</a>, with typical wall <a href='#cluster_346'>346</a>, <a href='#cluster_2635'>2635</a>, <a href='#cluster_4058'>4058</a> </td>
-<td></td>
-<td></td>
-</tr> -->
+        <tr>
+          <td class='menu' >
+            <a id='period_1' href='?experiment=exp_one_vs_all_period1'>- 1800</a>
+          </td>
+          <td class='menu' >
+            <a id='period_2' href='?experiment=exp_one_vs_all_period2'>1801-1850</a>
+          </td>
+          <td class='menu' >
+            <a id='period_3' href='?experiment=exp_one_vs_all_period3'>1851-1914</a>
+          </td>
+          <td class='menu' >
+            <a id='period_5' href='?experiment=exp_one_vs_all_period5'>1915-1939</a>
+          </td>
+          <td class='menu' >
+            <a id='period_6' href='?experiment=exp_one_vs_all_period6'>1940-1967</a>
+          </td>
+          <td class='menu' >
+            <a id='period_7' href='?experiment=exp_one_vs_all_period7'>1968-1975</a>
+          </td>
+          <td class='menu' >
+            <a id='period_8' href='?experiment=exp_one_vs_all_period8'>1976-1981</a>
+          </td>
+          <td class='menu' >
+            <a id='period_9' href='?experiment=exp_one_vs_all_period9'>1982-1989</a>
+          </td>
+          <td class='menu' >
+            <a id='period_10' href='?experiment=exp_one_vs_all_period10'>1990-1999</a>
+          </td>
+          <td class='menu' >
+            <a id='period_11' href='?experiment=exp_one_vs_all_period11'>2000 +</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class='period_color_class' style='background-color:#FF0000'></div>
+          </td>
+          <td>
+            <div class='period_color_class' style='background-color:#DF7401'></div>
+          </td>
+          <td>
+            <div class='period_color_class' style='background-color:#D7DF01'></div>
+          </td>
+          <td>
+            <div class='period_color_class' style='background-color:#80FF00'></div>
+          </td>
+          <td>
+            <div class='period_color_class' style='background-color:#00FF80'></div>
+          </td>
+          <td>
+            <div class='period_color_class' style='background-color:#01DFA5'></div>
+          </td>
+          <td>
+            <div class='period_color_class' style='background-color:#01A9DB'></div>
+          </td>
+          <td>
+            <div class='period_color_class' style='background-color:#0431B4'></div>
+          </td>
+          <td>
+            <div class='period_color_class' style='background-color:#A901DB'></div>
+          </td>
+          <td>
+            <div class='period_color_class' style='background-color:#FE2E9A'></div>
+          </td>
+        </tr>
+        <!-- <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          large balcony
+          <a href='#cluster_4310'>4310</a>
+          ,
+          <a href='#cluster_3475'>3475</a>
+          , very close each other
+          <a href='#cluster_460'>460</a>
+          , in glass/PVC
+          <a href='#cluster_2124'>2124</a>
+          ,
+          <a href='#cluster_1843'>1843</a>
+          or grille
+          <a href='#cluster_1070'>1070</a>
+          ,
+          <a href='#cluster_1646'>1646</a>
+          ,
+        </td>
+        <td></td>
+        <td>
+          typical elements of social buildings (
+          <a href'http://en.wikipedia.org/wiki/HLM'>HLM</a>
+          ) e.g.  small simple square windows
+          <a href='#cluster_2816'>2816</a>
+          <a href='#cluster_923'>923</a>
+          ,
+          <a href='#cluster_3444'>3444</a>
+          ,
+          <a href='#cluster_5332'>5332</a>
+          ,
+          <a href='#cluster_5297'>5297</a>
+          , with typical wall
+          <a href='#cluster_346'>346</a>
+          ,
+          <a href='#cluster_2635'>2635</a>
+          ,
+          <a href='#cluster_4058'>4058</a>
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+      -->
+    </table>
+  </li>
+ 
+  <li> <b>Co-occurrance graph of visual elements of a given time period:</b> 
+    <br/>
+    We first built a co-occurrence graph where each node is one of the top K most discriminative and representative visual element (ranked by harmonic mean) of the time period, and the edges a measure of co-occurrence of their detections within a given <b>shared context</b>
+  </li>
+  <li>
+    <b>Context / co-occurrence metrics (Jaccard index)</b>
+    <br/>
+    -
+    <a href='#'>Context = shared image</a>
+    <br/>Co-occurrance(A,B) : number of common images where the detections of visual elements A and B appear / number of images in which the detections of A or B appear
+    <br/>
+    -
+    <a href='#'>Context = shared overlaps</a>
+    <br/>Co-occurrance(A,B) number of detections  of A or B overlaped by the other visual element (B or A) / number of detections of A and B
+     <br/><i>IMPORTANT NOTE ON RESULT RELIABILITY</i>: Here the detections are the KNN of the visual elements, not detections found by using trained detectors.
+  </li>
+</ul>
 
-</table>
-      Period time: <b><span id='period_id'></span></b>
-    </li>
-    <li>
-      Results ordered by size of clusters
-    </li>
-    <li> <a href='cooccurrence.html'> detailed view of the graph per node</a></li>
-    <li>
-      to change the experiment, change {exp_name} in the url i.e.g clustering_candidates.html?experiment={exp_name}
-    </li>
+<table id='clusters'></table>
 
-  </ul>
-
-   <table id='clusters'>
-    
-  </table>
-
-  <script  type="text/template"  id='list_cluster_template'>
+<script  type="text/template"  id='list_cluster_template'>
       <tr><td width='100'> 
             <b style='font-size:13px'>Cluster <%= cluster.id %></b>
           </td><td>
@@ -112,7 +189,7 @@
          for (var i = 0; i< Math.min(300,cluster.members.length) ; i++) {
             candidate = cluster.members[i];
             img_path = candidate.img_path;
-     		var style = "";
+        var style = "";
          %><a href='cooccurrences.html?experiment=<%= exp %>&context=<%= context %>#patch_<%= candidate.id %>'><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' class='<%= style %>' title='more details for patch <%= candidate.id %>'/><% } %></td> </tr>
       
     </script>

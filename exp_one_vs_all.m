@@ -7,9 +7,12 @@ clear;
 % load basic configuration
 config();
 
+% time periods indices
+PERIODS = [ 1 2 3 5 6 7 8 9 10 11];
+
 % Parameters for this experiment
 params = struct(..., 
-  'positive_labels', 8,...
+  'positive_labels', [8],... % set of time periods defined as positive labels
   'experiment_name', 'exp_one_vs_all_period' ,...%<-- NAME OF THE EXPERIMENT: IMPORTANT to differenciate experimental saved results
   'pos_sample_size', 500, ... % sample size for positive images % usually 2000 positive images is enough; sometimes even 1000 works
   'neg_sample_size', 1500, ... % sample size for negative images % usually 2000 positive images is enough; sometimes even 1000 works   
@@ -28,24 +31,24 @@ params = struct(...,
   'discriminativity_threshold',0.7, ...
   'representativity_threshold',0.05);% in the first step , the ratio of nearest neighboors used to compute purity as a ratio of the number of positive images.
 
+% update name of the experiment 
+params.experiment_name = [params.experiment_name num2str(params.positive_labels)];
 
-
-positive_label = params.positive_labels;
-params.experiment_name = [params.experiment_name num2str(positive_label)];
-
+% deduce negative labels
+negative_labels = setdiff(PERIODS, positive_labels);
+      
 % create dir where results will be put
 experiment_dir = sprintf('results/%s',params.experiment_name);
 mkdir(experiment_dir);
 
-
-% CURRENT STEP OF THE EXPERIMENT
-exp_step = 0;
-running_all = true; % want to run only a specific step or from a spec?
+exp_step = 0; % CURRENT STEP OF THE EXPERIMENT
+running_all = true; % want to run only a specific step or from a specific spec?
 saving_step = true; % saving step?
 
 
-% START
 
+
+% START
 
 % loading a given step of the experiment ?
 if (exp_step > 0)
@@ -60,8 +63,10 @@ while (running_all && (exp_step ~= END_STEP))
 
     % STEP  Generate pseudo-randomly some candidate
     case 0
-      % prepare data 
-      [imgs, pos_idx] = prepare_data_one_vs_all(positive_label, params);   
+      
+      % prepare data
+      [imgs, pos_idx] = prepare_data(positive_labels, negative_labels, params);   
+      
       step1_generate_candidates;
       exp_step = exp_step + 1;
 

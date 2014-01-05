@@ -2,20 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Discovery of visual element discriminative of a given period of time</title> 
+  <title>Discovery of visual elements discriminative of a given period of time</title> 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
-  <meta name="author" content="nm">
+  <meta name="author" content="Nicolas Maisonneuve">
 
   <!-- Le styles  -->
-
   <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet">
   <!-- Custom styles for this template 
   <link href="http://getbootstrap.com/examples/offcanvas/offcanvas.css" rel="stylesheet">-->
 
   <script src="jquery.min.js"></script>
   <script src="underscore-min.js"></script>
-  <script src="visualisation.js"></script>
+
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
   <script src="assets/js/html5shiv.js"></script>
@@ -47,9 +46,11 @@
   </h1>
 
   <ul>
-       <li> <b>Data:</b> Google Street view images (no ground floor) + cadastre data from Paris. </li>
+   <li>
+      <b>Description </b> Discovered square visual elements of facades of buildings in Paris that are discriminative (unique) to a time period and representative (present in lots of building) of this period.  The visual elements are ranked according to 2 attributes: Purity and Frequency and grouped (or not) according to the size of the visual element (multi-scale discovery method). <b>Data:</b> Google Street view images (no ground floor) + cadastre data from Paris. Colored border of each visual element = time period. </li>
+ 
        
-  <li></b> list of experiments
+  <li><b>List of time periods / experiments</b>
    <table CELLSPACING="3" border='#f00'>
 <tr>
 <td class='menu' ><a id='period_1' href='?experiment=exp_one_vs_all_period1'>- 1800</a></td> 
@@ -93,24 +94,22 @@
   </li>
 
 
-    <li>
-      <b>Description </b> Top 5% most discriminative clusters of visual elements coming from the facade of buildings in Paris for a given time period.  Colored border of each visual element = period time. (multi-scale discovery method)
-    </li>
+   
  
     <li>
-      <b>Ranked by</b>:
-      <br/><a class='sort' data-sort='purity' href='#'>purity / precision</a> (% of detections with positive label), 
-     <br/><a class='sort' data-sort='frequency' href='#'>frequency / recall</a> (% of positive images where there is at least one detection of this patch) , 
-     <br/><a class='sort' data-sort='mean' href='#'>harmonic mean</a> 
+      <b>Visual elements ranked by:</b> (default = harmonic mean)
+      <br/>- <a class='sort' data-sort='purity' href='#'>Purity </a> (% of detections from positive images, ~ precision), 
+     <br/>- <a class='sort' data-sort='frequency' href='#'>Frequency </a> (% of positive images with at least one detection of this visual element, ~ recall) , 
+     <br/>- <a class='sort' data-sort='mean' href='#'>Harmonic mean of both</a> 
      </li>
      <li>
-    <b>Group by: </b>
+    <b>Group by: </b> (default = grouped)
      
-          <a class='group' data-group='size' href='#'>Patch size </a> ,   
+          <br/>- <a class='group' data-group='size' href='#'>Patch size </a>  
          
-          <a class='group' data-group='no' href='#'>no group</a>
+          <br/>- <a class='group' data-group='no' href='#'>no group</a>
 </li>
-    <li><b>Associative/Hebbian learning & co-occurence graph</b>: lots of detectors 'fire' on similar context. To discover and analyse such associations we're testing several definitions of context
+    <li><b>Associative/Hebbian learning & co-occurence graph</b>: To discover associations between visual elements i.e. their co-appearance inside a shared context, we build co-occurrance graph with 2 definitions of context
       <ul>
       <li><a href='#' id='cooccurrence_image_link'> context  = shared image</a>.
       </li>
@@ -173,4 +172,5 @@
        
     </script>
 </body>
+<script src="index.js"></script>
 </html>
