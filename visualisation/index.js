@@ -6,17 +6,7 @@ var filter;
 var ranking ='purity';
 var group ='size';
 
-var period_label = {"1": "< 1800",
-"2":"1801-1850",
-"3":"1851-1914",
-"5": "1915-1939",
-"6":"1940-1967",
-"7":"1968-1975",
-"8":"1976-1981",
-"9":"1982-1989",
-"10":"1990-1999",
-"11": "2000 >=",
-"0": "unknown"};
+
 
 display_list_images = function (images){
   images = images.slice(1,15);
@@ -79,13 +69,6 @@ function group_by_levels (clusters){
 }
 
 
-function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
-
 $(function() {
   // load templates
   template = $("#list_cluster_template").html();
@@ -93,11 +76,7 @@ $(function() {
   list_scale_template = $("#list_clusters_scale_template").html();
   list_images_template = $("#list_images_template").html();
 
-  experiment_name = getParameterByName('experiment');
-  console.log(experiment_name);
-  if (experiment_name == '') {
-    experiment_name = 'exp1';
-  }
+  detecting_period();
 
   filter = getParameterByName('filter');
   if (filter != '') {
@@ -108,13 +87,7 @@ $(function() {
   }
   
 
-  matching = experiment_name.match(/exp_one_vs_all_period(\d+)/);
-  console.log(matching);
-  if (matching != null)
-   given_period = period_label[matching[1]];
-  else{
-    given_period ='unknown';
-  }
+ 
 
   $(".group").click(function(event){
     group = $(this).data('group');
@@ -127,9 +100,7 @@ $(function() {
     visualize(clusters);
   });
 
-  $("#experiment_id").html("Experiment : "+experiment_name);
-  $("#period_"+matching[1]).addClass('current_period');
-  console.log("#period_"+matching[1]);
+
   
   $("#clusters").on("click", ".morevisible", function(event){
     cluster_id = $(this).data('cluster');

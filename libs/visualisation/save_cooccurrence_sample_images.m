@@ -2,7 +2,7 @@ function save_cooccurrence_sample_images(clusters_idx, top_detectors, detections
 
   nb_co_images  = max(detections(:,2));
 
-  sample_dir = [co_dir '/samples_images'];
+  sample_dir = [co_dir '/sample_images'];
   mkdir(sample_dir);
 
   for (cluster_idx = clusters_idx')
@@ -23,8 +23,17 @@ function save_cooccurrence_sample_images(clusters_idx, top_detectors, detections
 
       im = gen_heatmap(im, selected_detections);
       filename = sprintf('%s/cluster_%d_%d_heatmap.jpg',sample_dir,cluster_idx , examples(i).img_idx);    
+      
+      heatmap.img_idx = examples(i).img_idx;
+      heatmap.cluster_idx = cluster_idx;
+      heatmap.filename = filename;   
+      
       imwrite(im, filename);
     end  
   end
+  
+  %saving image descriptor
+  json_file(heatmaps,[co_dir 'sample_images.json']);
+  
 end
 

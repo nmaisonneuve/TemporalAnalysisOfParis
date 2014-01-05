@@ -15,6 +15,7 @@
 
   <script src="jquery.min.js"></script>
   <script src="underscore-min.js"></script>
+  <script src="tools.js"></script>
   <script src="clustering_cooccurrences.js"></script>
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -159,21 +160,16 @@
       -->
     </table>
   </li>
- 
-  <li> <b>Co-occurrance graph of visual elements of a given time period:</b> 
-    <br/>
-    We first built a co-occurrence graph where each node is one of the top K most discriminative and representative visual element (ranked by harmonic mean) of the time period, and the edges a measure of co-occurrence of their detections within a given <b>shared context</b>
-  </li>
+
   <li>
-    <b>Context / co-occurrence metrics (Jaccard index)</b>
+    <b>2 Co-occurrence graphes and metrics, and thus clustering</b>
+    <br/>We built a co-occurrence graph where each node is one of the top K most discriminative and representative visual element (ranked by harmonic mean) of the time period, and the edges a measure of co-occurrence of their detections within a <i>shared context</i>. We then use a clustering algo to detect clusters/denser parts of the graph using the common <a href='http://perso.uclouvain.be/vincent.blondel/research/louvain.html'>Louvain method</a>, based on network modularity. Here we display the first level of clusters/detected denser subgraphes. (see <a href='http://en.wikipedia.org/wiki/Community_structure'> Community Structure</a>)
+ <br/>We propose 2 co-occurrence graphes based on a different definition of 'shared context' and thus using different co-occurrences metrics <br/>
+    -
+    <a href='#' id='context_image' >Context = shared image</a> with co-occurrance(A,B) = number of common images where the detections of visual elements A and B appear / number of images in which the detections of A or B appear
     <br/>
     -
-    <a href='#'>Context = shared image</a>
-    <br/>Co-occurrance(A,B) : number of common images where the detections of visual elements A and B appear / number of images in which the detections of A or B appear
-    <br/>
-    -
-    <a href='#'>Context = shared overlaps</a>
-    <br/>Co-occurrance(A,B) number of detections  of A or B overlaped by the other visual element (B or A) / number of detections of A and B
+    <a href='#' id='context_area'>Context = shared overlaps</a> with co-occurrance(A,B) = number of detections  of A or B overlaped by the other visual element (B or A) / number of detections of A and B
      <br/><i>IMPORTANT NOTE ON RESULT RELIABILITY</i>: Here the detections are the KNN of the visual elements, not detections found by using trained detectors.
   </li>
 </ul>
@@ -191,6 +187,9 @@
             img_path = candidate.img_path;
         var style = "";
          %><a href='cooccurrences.html?experiment=<%= exp %>&context=<%= context %>#patch_<%= candidate.id %>'><img src='../results/<%= exp %>/images/<%= img_path[0] %>/crop_<%= img_path[1] %>_<%= img_path[2] %>_<%= img_path[3] %>_<%= img_path[4] %>.jpg' width='60' height='60' class='<%= style %>' title='more details for patch <%= candidate.id %>'/><% } %></td> </tr>
+
+         <tr><td></td>
+         <td>Best examples <br/><a href='../results/<%= exp %>/cooccurrence/area/samples_images/cluster_1_17_heatmap.jpg'><img src='../results/<%= exp %>/cooccurrence/area/samples_images/cluster_1_17_heatmap.jpg' height='100'/></a></td></tr>
       
     </script>
 </body>
