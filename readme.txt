@@ -1,4 +1,3 @@
-
 code from Carl & 
 %%% INSTALL
 
@@ -14,11 +13,15 @@ check config.m
 
 %% RUNNING
 
+run exp_one_vs_all.m
+
+
+
+-------------
 - time / complexity of the algo
 - minimizing the numbere of detectors
 - maximixing the inter class gap.
 
-run experimentX.m
 - scaling 
 not multi-scaling , since it raise
 
